@@ -1,20 +1,16 @@
 #include <SFML/Graphics.hpp>
 
-//int main()
-//{
-//    sf::Window window(sf::VideoMode({ 800, 600 }), "PONG GAME");
-//
-//}
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({ 800, 600 }), "PONG GAME");
-
+    sf::RenderWindow window;
+    window.create(sf::VideoMode({ 800, 600 }), "PONG GAME");
+    window.setFramerateLimit(60);
 
     while (window.isOpen())
     {
         
-        while (const std::optional event =window.pollEvent())
+        while (const std::optional event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>())
                 window.close();
