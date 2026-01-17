@@ -3,6 +3,10 @@
 
 int main()
 {
+    enum class GameState {
+        SkinSelection,
+        Playing
+    };
     sf::RenderWindow window;
     window.create(sf::VideoMode({ 800, 600 }), "PONG GAME");
     window.setFramerateLimit(60);
