@@ -1,20 +1,16 @@
 #pragma once
 #include "../pong/GameObject.h"
 class Paddle : public GameObject {
-
-public:
-	enum class Direction {
-		None,
-		Up,
-		Down
+	float speed;
+	enum Direction {
+	None,
+	Up,
+	Down
 	};
-private:
-	float speed_;
-
-	Direction direction_ = Direction::None;
+	Direction _direction = None;
 public:
-
 	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
+	void collision();
 	void handleInput();
 };

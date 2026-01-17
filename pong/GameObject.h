@@ -3,8 +3,8 @@
 
 class GameObject {
 protected:
-	sf::Vector2f position;
-	sf::Vector2f velocity;
+	sf::Vector2f position_;
+	sf::Vector2f velocity_;
 public:
 	virtual ~GameObject()=default;
 	virtual void draw(sf::RenderWindow& window) = 0;

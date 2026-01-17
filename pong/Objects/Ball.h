@@ -1,18 +1,15 @@
 #pragma once
 #include "../pong/GameObject.h"
-
-class Paddle;
-
 class Ball : public GameObject{
-
-	float speed_ = 0.f;
-	bool isOut_ = false;
-	sf::CircleShape ballShape_;
+	int angle=0;
+	float speed = 0.f;
+	bool isOut = false;
+	sf::CircleShape ballShape;
 public:
 
 	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
+	void collision();
 	void setSkin();
-	void bounceFromPaddle(const Paddle& paddle);
-	void resetPosition(const sf::Vector2f &pos);
+	void resetPosition(sf::Vector2f);
 };

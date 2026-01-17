@@ -18,18 +18,21 @@
     <ClCompile Include="pong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="texture.cpp">
+    <ClCompile Include="SkinFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texturing\TextureSkin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Paddle.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="texture.h">
+    <ClInclude Include="TextureSkin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
@@ -39,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Paddle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texturing\SkinFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texturing\BallSkin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
