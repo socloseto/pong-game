@@ -136,19 +136,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="Paddle.cpp" />
-    <ClCompile Include="pong.cpp" />
-    <ClCompile Include="SkinFactory.cpp" />
+    <ClCompile Include="Objects\Ball.cpp" />
+    <ClCompile Include="Objects\Paddle.cpp" />
+    <ClCompile Include="Objects\pong.cpp" />
+    <ClCompile Include="score\scorePanel.cpp" />
+    <ClCompile Include="texturing\SkinFactory.cpp" />
     <ClCompile Include="texturing\TextureSkin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Paddle.h" />
-    <ClInclude Include="TextureSkin.h" />
+    <ClInclude Include="Objects\Ball.h" />
+    <ClInclude Include="Objects\GameObject.h" />
+    <ClInclude Include="Objects\Paddle.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="score\scorePanel.h" />
+    <ClInclude Include="Objects\TextPanel.h" />
+    <ClInclude Include="texturing\TextureSkin.h" />
     <ClInclude Include="texturing\BallSkin.h" />
     <ClInclude Include="texturing\SkinFactory.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="pong.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images\BlueEye.png" />
+    <Image Include="images\CrackedEye.png" />
+    <Image Include="images\Cyclop.png" />
+    <Image Include="images\CyclopEye.png" />
+    <Image Include="images\DonutEye.png" />
+    <Image Include="images\Watermelon.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
