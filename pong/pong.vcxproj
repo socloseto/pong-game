@@ -139,20 +139,24 @@
     <ClCompile Include="Objects\Ball.cpp" />
     <ClCompile Include="Objects\Paddle.cpp" />
     <ClCompile Include="Objects\pong.cpp" />
-    <ClCompile Include="score\scorePanel.cpp" />
+    <ClCompile Include="ui\scorePanel.cpp" />
+    <ClCompile Include="ui\SkinsMenu.cpp" />
     <ClCompile Include="texturing\SkinFactory.cpp" />
     <ClCompile Include="texturing\TextureSkin.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\GoalObserver.h" />
     <ClInclude Include="Objects\Ball.h" />
     <ClInclude Include="Objects\GameObject.h" />
     <ClInclude Include="Objects\Paddle.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="score\scorePanel.h" />
-    <ClInclude Include="Objects\TextPanel.h" />
+    <ClInclude Include="ui\scorePanel.h" />
+    <ClInclude Include="ui\TextPanel.h" />
+    <ClInclude Include="ui\SkinsMenu.h" />
     <ClInclude Include="texturing\TextureSkin.h" />
     <ClInclude Include="texturing\BallSkin.h" />
     <ClInclude Include="texturing\SkinFactory.h" />
+    <ClInclude Include="common\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pong.rc" />
@@ -160,10 +164,12 @@
   <ItemGroup>
     <Image Include="images\BlueEye.png" />
     <Image Include="images\CrackedEye.png" />
-    <Image Include="images\Cyclop.png" />
     <Image Include="images\CyclopEye.png" />
     <Image Include="images\DonutEye.png" />
     <Image Include="images\Watermelon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\Roboto-Black.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,54 +13,93 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{e07abc03-1bc1-4f5d-99f8-98912c1e10e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\images">
+      <UniqueIdentifier>{e4da8398-b351-4c30-87bc-2f2d4704d88b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\texturing">
+      <UniqueIdentifier>{2ac97b88-6eaf-434e-8904-e8583908428d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{c4019698-678e-4319-b4b2-75cb8aaa2169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\texturing">
+      <UniqueIdentifier>{79c80d3b-aaea-41cd-8e5f-da4329988d7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{d477db1c-c704-4e63-91de-af018f13bf53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ui">
+      <UniqueIdentifier>{82ee602a-b2cc-4bcf-a632-1e34079f0d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\fonts">
+      <UniqueIdentifier>{ad60fb3a-3440-40d5-b811-f4386cb1f009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\helperFunc">
+      <UniqueIdentifier>{5a9095ad-7444-4fb1-bf59-90c153a56abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pong.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="texturing\TextureSkin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Paddle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ball.cpp">
+    <ClCompile Include="Objects\pong.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="texturing\SkinFactory.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\texturing</Filter>
     </ClCompile>
-    <ClCompile Include="scorePanel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="texturing\TextureSkin.cpp">
+      <Filter>Source Files\texturing</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Ball.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Paddle.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\scorePanel.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="ui\SkinsMenu.cpp">
+      <Filter>Source Files\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextureSkin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Paddle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="texturing\SkinFactory.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Objects\Ball.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="texturing\BallSkin.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameObject.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Paddle.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="texturing\SkinFactory.h">
+      <Filter>Header Files\texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="texturing\TextureSkin.h">
+      <Filter>Header Files\texturing</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\scorePanel.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\SkinsMenu.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="ui\TextPanel.h">
+      <Filter>Header Files\ui</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="scorePanel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files\helperFunc</Filter>
     </ClInclude>
-    <ClInclude Include="TextPanel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GoalObserver.h">
+      <Filter>Header Files\helperFunc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,22 +109,24 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\BlueEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="images\CrackedEye.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="images\DonutEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="images\Watermelon.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
-    <Image Include="images\Cyclop.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="images\DonutEye.png">
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="images\CyclopEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\Roboto-Black.ttf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

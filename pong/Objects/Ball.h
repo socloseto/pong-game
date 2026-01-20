@@ -7,7 +7,7 @@ class Ball : public GameObject{
 
 private:
 	std::unique_ptr<BallSkin> skin_;
-	float speed_ = 0.f;
+	float speed_ = 400.f;
 	bool isOut_ = false;
 	sf::CircleShape ballShape_;
 public:
@@ -17,4 +17,6 @@ public:
 	void setSkin(std::unique_ptr<BallSkin> newSkin);
 	void bounceFromPaddle(const Paddle& paddle);
 	void resetPosition(const sf::Vector2f &pos);
+	sf::FloatRect getBounds() const;
+	sf::Vector2f getPosition() const;
 };
