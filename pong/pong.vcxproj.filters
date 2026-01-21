@@ -37,8 +37,14 @@
     <Filter Include="Resource Files\fonts">
       <UniqueIdentifier>{ad60fb3a-3440-40d5-b811-f4386cb1f009}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\helperFunc">
+    <Filter Include="Header Files\common">
       <UniqueIdentifier>{5a9095ad-7444-4fb1-bf59-90c153a56abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{f6275c23-cc2d-41bc-ae22-657472e04519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common\Game">
+      <UniqueIdentifier>{d3bd2e64-04f0-43b3-89d2-2650d2bf8ed8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="ui\SkinsMenu.cpp">
       <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="common\Game\Game.cpp">
+      <Filter>Source Files\common\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,11 +104,14 @@
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.h">
-      <Filter>Header Files\helperFunc</Filter>
+    <ClInclude Include="common\GoalObserver.h">
+      <Filter>Header Files\common</Filter>
     </ClInclude>
-    <ClInclude Include="GoalObserver.h">
-      <Filter>Header Files\helperFunc</Filter>
+    <ClInclude Include="common\Utils.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="common\Game\Game.h">
+      <Filter>Header Files\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

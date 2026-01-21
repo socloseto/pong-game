@@ -1,22 +1,24 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "/projectFolder/pong-game/pong/texturing/SkinFactory.h"
+#include "../texturing/SkinFactory.h"
 
 class SkinsMenu {
 
-	sf::Font font;
 	sf::Text title_;
 	struct MenuItem
 	{
 		sf::Text text;
 		SkinFactory::ballSkinType type;
+
+		MenuItem(sf::Text&& t, SkinFactory::ballSkinType type)
+			: text(std::move(t)), type(type) {}
 	};
 	std::vector<MenuItem> items_;
 	int hoveredIndex_ = -1;
 
 public:
-	SkinsMenu(sf::Font& font);
+	SkinsMenu();
 
 	void draw(sf::RenderWindow& window);
 	int handleMouse(sf::Vector2i mousePos, bool isClicked);

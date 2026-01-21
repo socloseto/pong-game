@@ -1,5 +1,6 @@
 #include "Paddle.h"
-#include "/projectFolder/pong-game/pong/Utils.h"
+#include "../common/Utils.h"
+
 
 Paddle::Paddle() {
 
@@ -16,7 +17,7 @@ sf::Vector2f Paddle::getSize() const {
 void Paddle::draw(sf::RenderWindow& window) {
 	window.draw(paddleShape_);
 }
-void Paddle::update(float deltaTime) {
+void Paddle::update(float deltaTime, const sf::RenderWindow& window) {
 	if (direction_ == Direction::Up) {
 		velocity_.y = -speed_;
 	}
@@ -27,11 +28,16 @@ void Paddle::update(float deltaTime) {
 		velocity_.y = 0.f;
 	}
 	position_ += velocity_ * deltaTime;
-	if (position_.y < 50.f)
-		position_.y = 50.f;
-	if (position_.y > 550.f)
-		position_.y = 550.f;
+	float screenHeight = static_cast<float>(window.getSize().y);
+	float paddleHeight = paddleShape_.getGlobalBounds().size.y;
+	float halfHeight = paddleHeight / 2.f;
 
+	if (position_.y < halfHeight) {
+		position_.y = halfHeight;
+	}
+	else if (position_.y > screenHeight - halfHeight) {
+		position_.y = screenHeight - halfHeight;
+	}
 	paddleShape_.setPosition(position_);
 }
 void Paddle::handleInput() {
@@ -43,4 +49,11 @@ void Paddle::handleInput() {
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
 		direction_= Direction::Down;
 	}
+}
+void Paddle::move(float offsetX, float offsetY) {
+	sf::Vector2f currentPos = getPosition();
+	setPosition({ currentPos.x,currentPos.y + offsetY });
+}
+void Paddle::setPosition(const sf::Vector2f& pos) {
+	paddleShape_.setPosition(pos);
 }

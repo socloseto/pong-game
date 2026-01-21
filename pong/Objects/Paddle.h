@@ -14,10 +14,11 @@ private:
 	Direction direction_ = Direction::None;
 public:
 	Paddle();
-	void update(float deltaTime) override;
+	void update(float deltaTime, const sf::RenderWindow& window) override;
 	void draw(sf::RenderWindow& window) override;
 	void handleInput();
 	sf::Vector2f getSize() const;
 	sf::Vector2f getPosition() const;
-
+	void setPosition(const sf::Vector2f& pos);
+	void move(float offsetX, float offsetY);
 };

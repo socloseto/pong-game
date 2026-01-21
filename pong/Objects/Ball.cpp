@@ -2,7 +2,7 @@
 #include "Paddle.h"
 #include <stdexcept>
 #include <cmath>
-#include "/projectFolder/pong-game/pong/Utils.h"
+#include "../common/Utils.h"
 
 Ball::Ball() {
     float radius = 10.f;
@@ -10,12 +10,27 @@ Ball::Ball() {
     centerOrigin(ballShape_);
     ballShape_.setFillColor(sf::Color::White);
 }
-void Ball::update(float deltaTime) {
+void Ball::update(float deltaTime, const sf::RenderWindow &window) {
 
     position_ += velocity_ * deltaTime;
+    if (position_.y <= 0) {
+        position_.y = 0;
+        velocity_.y = -velocity_.y;
+    }
+    else if (position_.y + (ballShape_.getRadius() * 2.f) >= window.getSize().y) {
+        position_.y = window.getSize().y - (ballShape_.getRadius() * 2.f);
+        velocity_.y = -velocity_.y;
+    }
     ballShape_.setPosition(position_);
 }
-
+void Ball::notifyGoal(GoalObserver::Side side) {
+    for (auto obs : observers_) {
+        obs->onGoal(side);
+    }
+}
+void Ball::addObserver(GoalObserver* obs){ 
+    observers_.push_back(obs);
+}
 void Ball::bounceFromPaddle(const Paddle& paddle) {
     float paddleCenter = paddle.getPosition().y + paddle.getSize().y / 2.f;
     float ballCenter = position_.y + ballShape_.getRadius();
@@ -39,8 +54,7 @@ void Ball::draw(sf::RenderWindow& window) {
 }
 
 void Ball::resetPosition(const sf::Vector2f &pos) {
-    position_ = pos;
-    ballShape_.setPosition(position_);
+    setPosition(pos);
     velocity_ = { speed_,0.f };
 
 }
@@ -49,4 +63,8 @@ sf::FloatRect Ball::getBounds() const {
 }
 sf::Vector2f Ball::getPosition() const {
     return position_; 
+}
+void Ball::setPosition(const sf::Vector2f &pos) {
+    position_ = pos;
+    ballShape_.setPosition(position_);
 }
