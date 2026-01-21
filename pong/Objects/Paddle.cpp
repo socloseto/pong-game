@@ -50,6 +50,9 @@ void Paddle::handleInput() {
 		direction_= Direction::Down;
 	}
 }
+sf::FloatRect Paddle::getBounds() const {
+	return paddleShape_.getGlobalBounds();
+}
 void Paddle::move(float offsetX, float offsetY) {
 	sf::Vector2f currentPos = getPosition();
 	setPosition({ currentPos.x,currentPos.y + offsetY });

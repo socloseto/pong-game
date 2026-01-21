@@ -10,8 +10,8 @@ Game::Game() :
 	score_.setPositionAtCenter(window_);
 	ball_.addObserver(&score_);
 
-	player_.setPosition({ 30.f, center.y });
-	cpu_.setPosition({ 770.f, center.y });
+	player_.setPosition({ 40.f, center.y });
+	cpu_.setPosition({ 760.f, center.y });
 	resetBall();
 }
 void Game::run(){
@@ -43,18 +43,23 @@ void Game::processInput() {
 					sf::Vector2i mousePos = sf::Mouse::getPosition(window_);
 					int skinIdx = skinsMenu_.handleMouse(mousePos, true);
 					if (skinIdx != -1) {
+						auto skin = SkinFactory::CreateSkin(skinsMenu_.getSkinType(skinIdx));
 						try {
-
-						ball_.setSkin(SkinFactory::CreateSkin(skinsMenu_.getSkinType(skinIdx)));
+							
+						ball_.setSkin(std::move(skin));
 						state_ = GameState::Playing;
 						resetBall();
 						}
 						catch (const std::runtime_error& e) {
+
 							std::cerr << "Skin error: " << e.what() << std::endl;
 						}
 					}
 				}
 			}
+		}
+		if (state_ == GameState::Playing) {
+			player_.handleInput();
 		}
 	}
 }
@@ -63,6 +68,16 @@ void Game::update(float deltaTime) {
 		ball_.update(deltaTime, window_);
 		player_.update(deltaTime,window_);
 		cpu_.update(deltaTime, window_);
+
+		if (ball_.getPosition().x < 0 || ball_.getPosition().x > window_.getSize().x) {
+			resetBall();
+		}
+		if (ball_.getBounds().findIntersection(player_.getBounds())) {
+			ball_.bounceFromPaddle(player_);
+		}
+		if (ball_.getBounds().findIntersection(cpu_.getBounds())) {
+			ball_.bounceFromPaddle(cpu_);
+		}
 		float ballY = ball_.getPosition().y;
 		float cpuY = cpu_.getPosition().y;
 		if (ballY > cpuY) cpu_.move(0, 300.f * deltaTime);

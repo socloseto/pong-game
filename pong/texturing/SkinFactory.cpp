@@ -5,11 +5,11 @@
 
 std::unique_ptr<BallSkin> SkinFactory::CreateSkin(ballSkinType type) {
     static const std::map<ballSkinType, std::string> skinPaths = {
-        {DonutEye,   "IDB_PNG4"},
-        {Watermelon, "IDB_PNG5"},
-        {BlueEye,    "IDB_PNG1"},
-        {CyclopeEye, "IDB_PNG3"},
-        {CrackedEye, "IDB_PNG2"}
+        {DonutEye,   "images/DonutEye.png"},
+        {Watermelon, "images/Watermelon.png"},
+        {BlueEye,    "images/BlueEye.png"},
+        {CyclopeEye, "images/CyclopeEye.png"}, 
+        {CrackedEye, "images/CrackedEye.png"}
     };
     auto it = skinPaths.find(type);
     if (it != skinPaths.end()) {

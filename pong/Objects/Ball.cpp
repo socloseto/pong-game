@@ -13,14 +13,16 @@ Ball::Ball() {
 void Ball::update(float deltaTime, const sf::RenderWindow &window) {
 
     position_ += velocity_ * deltaTime;
-    if (position_.y <= 0) {
-        position_.y = 0;
+    if (position_.y <= 0 || position_.y + ballShape_.getRadius() * 2.f >= window.getSize().y) {
         velocity_.y = -velocity_.y;
     }
-    else if (position_.y + (ballShape_.getRadius() * 2.f) >= window.getSize().y) {
-        position_.y = window.getSize().y - (ballShape_.getRadius() * 2.f);
-        velocity_.y = -velocity_.y;
+    if (position_.x < 0) {
+        notifyGoal(GoalObserver::Side::Left);
     }
+    else if (position_.x > window.getSize().x) {
+        notifyGoal(GoalObserver::Side::Right);
+    }
+
     ballShape_.setPosition(position_);
 }
 void Ball::notifyGoal(GoalObserver::Side side) {
@@ -55,7 +57,9 @@ void Ball::draw(sf::RenderWindow& window) {
 
 void Ball::resetPosition(const sf::Vector2f &pos) {
     setPosition(pos);
-    velocity_ = { speed_,0.f };
+    float dirX = (rand() % 2 == 0) ? speed_ : -speed_;
+    float dirY = static_cast<float>((rand() % 200) - 100);
+    velocity_ = { dirX, dirY };
 
 }
 sf::FloatRect Ball::getBounds() const {
