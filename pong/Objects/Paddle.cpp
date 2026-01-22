@@ -58,5 +58,7 @@ void Paddle::move(float offsetX, float offsetY) {
 	setPosition({ currentPos.x,currentPos.y + offsetY });
 }
 void Paddle::setPosition(const sf::Vector2f& pos) {
+	position_ = pos;
 	paddleShape_.setPosition(pos);
+
 }

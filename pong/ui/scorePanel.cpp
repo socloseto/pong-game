@@ -22,6 +22,12 @@ void ScorePanel::addRightPoint() {
 	rightPlayerScore++;
 	updateScore();
 }
+short ScorePanel::getLeftScore() const {
+	return leftPlayerScore;
+}
+short ScorePanel::getRightScore() const {
+	return rightPlayerScore;
+}
 
 void ScorePanel::updateScore(){
 	scoreDisplay.setString(std::to_string(leftPlayerScore) + " - " + std::to_string(rightPlayerScore));
@@ -35,4 +41,16 @@ void ScorePanel::setPositionAtCenter(const sf::RenderWindow& window) {
 	positionAtCenter(scoreDisplay, window);
 	sf::Vector2f centerPos = scoreDisplay.getPosition();
 	scoreDisplay.setPosition({ centerPos.x, 50.f });
+}
+void ScorePanel::showFinalMessage(const std::string& message) {
+	scoreDisplay.setString(message);
+
+	scoreDisplay.setFillColor(sf::Color::Yellow);
+}
+void ScorePanel::reset() {
+	leftPlayerScore = 0;
+	rightPlayerScore = 0;
+
+	scoreDisplay.setFillColor(sf::Color::White);
+	updateScore();
 }

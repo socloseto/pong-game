@@ -17,6 +17,8 @@ private:
 	void render();
 	void resetBall();
 
+	float gameOverTimer_ = 0.f;
+
 	sf::RenderWindow window_;
 
 	Ball ball_;
@@ -25,6 +27,6 @@ private:
 	ScorePanel score_;
 	SkinsMenu skinsMenu_;
 
-	enum class GameState{Menu,Playing};
+	enum class GameState{Menu,Playing, GameOver};
 	GameState state_ = GameState::Menu;
 };

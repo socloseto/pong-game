@@ -30,12 +30,8 @@ void Game::processInput() {
 			window_.close();
 		}
 		if (const auto* resized = event->getIf<sf::Event::Resized>()) {
-			sf::FloatRect visibleArea({ 0.f, 0.f },
-				{ static_cast<float>(resized->size.x), static_cast<float>(resized->size.y) });
-			window_.setView(sf::View(visibleArea));
-			score_.setPositionAtCenter(window_);
-			float rightEdge = static_cast<float>(resized->size.x);
-			cpu_.setPosition({ rightEdge - 45.f, cpu_.getPosition().y });
+			sf::View view(sf::FloatRect({ 0.f, 0.f }, { 800.f, 600.f }));
+			window_.setView(view);
 		}
 		if (state_ == GameState::Menu) {
 			if (const auto* mouseBtn = event->getIf<sf::Event::MouseButtonPressed>()) {
@@ -61,6 +57,16 @@ void Game::processInput() {
 		if (state_ == GameState::Playing) {
 			player_.handleInput();
 		}
+		if (state_ == GameState::GameOver) {
+			if (gameOverTimer_ > 1.f) {
+				if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>()) {
+
+					score_.reset();
+					resetBall();
+					state_ = GameState::Playing;
+				}
+			}
+		}
 	}
 }
 void Game::update(float deltaTime) {
@@ -68,7 +74,16 @@ void Game::update(float deltaTime) {
 		ball_.update(deltaTime, window_);
 		player_.update(deltaTime,window_);
 		cpu_.update(deltaTime, window_);
-
+		if (score_.getLeftScore() >= 11) {
+			state_ = GameState::GameOver;
+			gameOverTimer_ = 0.f;
+			score_.showFinalMessage("YOU WIN!\nPress Any Key To RESTART");	
+		}
+		else if (score_.getRightScore() >= 11) {
+			state_ = GameState::GameOver;
+			gameOverTimer_ = 0.f;
+			score_.showFinalMessage("YOU LOSE!\nPress Any Key To RESTART");
+		}
 		if (ball_.getPosition().x < 0 || ball_.getPosition().x > window_.getSize().x) {
 			resetBall();
 		}
@@ -82,6 +97,10 @@ void Game::update(float deltaTime) {
 		float cpuY = cpu_.getPosition().y;
 		if (ballY > cpuY) cpu_.move(0, 300.f * deltaTime);
 		else cpu_.move(0, -300.f * deltaTime);
+	}
+	if (state_ == GameState::GameOver) {
+		gameOverTimer_ += deltaTime;
+	
 	}
 }
 void Game::render() {
