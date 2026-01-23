@@ -11,7 +11,7 @@ Game::Game() :
 	ball_.addObserver(&score_);
 
 	player_.setPosition({ 40.f, center.y });
-	cpu_.setPosition({ 760.f, center.y });
+	cpu_.setPosition({ window_.getSize().x - 40.f , center.y });
 	resetBall();
 }
 void Game::run(){
@@ -30,8 +30,11 @@ void Game::processInput() {
 			window_.close();
 		}
 		if (const auto* resized = event->getIf<sf::Event::Resized>()) {
-			sf::View view(sf::FloatRect({ 0.f, 0.f }, { 800.f, 600.f }));
+			float newWidth = static_cast<float>(resized->size.x);
+			float newHeight = static_cast<float>(resized->size.y);
+			sf::View view(sf::FloatRect({ 0.f, 0.f }, { newWidth, newHeight }));
 			window_.setView(view);
+			this->onResize(resized->size);
 		}
 		if (state_ == GameState::Menu) {
 			if (const auto* mouseBtn = event->getIf<sf::Event::MouseButtonPressed>()) {
@@ -77,15 +80,17 @@ void Game::update(float deltaTime) {
 		if (score_.getLeftScore() >= 11) {
 			state_ = GameState::GameOver;
 			gameOverTimer_ = 0.f;
-			score_.showFinalMessage("YOU WIN!\nPress Any Key To RESTART");	
+			score_.showFinalMessage("YOU WIN! Press Any Key To RESTART");	
 		}
 		else if (score_.getRightScore() >= 11) {
 			state_ = GameState::GameOver;
 			gameOverTimer_ = 0.f;
-			score_.showFinalMessage("YOU LOSE!\nPress Any Key To RESTART");
+			score_.showFinalMessage("YOU LOSE! Press Any Key To RESTART");
 		}
 		if (ball_.getPosition().x < 0 || ball_.getPosition().x > window_.getSize().x) {
 			resetBall();
+			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f});
+			cpu_.setPosition({ cpu_.getPosition().x,  window_.getSize().y / 2.f });
 		}
 		if (ball_.getBounds().findIntersection(player_.getBounds())) {
 			ball_.bounceFromPaddle(player_);
@@ -93,7 +98,8 @@ void Game::update(float deltaTime) {
 		if (ball_.getBounds().findIntersection(cpu_.getBounds())) {
 			ball_.bounceFromPaddle(cpu_);
 		}
-		cpu_.move(0, cpu_.cpuPaddleDirectionVelocity(ball_.getPosition().y, cpu_.getPosition().y) * deltaTime);
+		float direction = cpu_.cpuPaddleDirectionVelocity(ball_.getPosition().y, cpu_.getPosition().y);
+		cpu_.move(0, direction * cpu_.getSpeed() * deltaTime);
 
 	}
 	if (state_ == GameState::GameOver) {
@@ -119,4 +125,25 @@ void Game::render() {
 void Game::resetBall() {
 	sf::Vector2f center = getWindowCenter(window_);
 	ball_.resetPosition(center);
+}
+void Game::onResize(const sf::Vector2u& newSize) {
+	float baseHeight = 600.f;
+	float basePaddleSpeed = 450.f;
+	float scale = static_cast<float>(newSize.y) / baseHeight;
+
+	player_.setScale({ scale, scale });
+	cpu_.setScale({ scale, scale });
+	ball_.setScale({ scale, scale });
+
+
+	float w = static_cast<float>(newSize.x);
+	float h = static_cast<float>(newSize.y);
+
+	player_.setPosition({ 40.f * scale, h / 2.f });
+	cpu_.setPosition({ w - (40.f * scale), h / 2.f });
+	ball_.updateSpeed(scale*1.8f);
+	resetBall();
+	player_.updateSpeed(scale);
+	cpu_.updateSpeed(scale);
+	score_.setPositionAtCenter(window_);
 }

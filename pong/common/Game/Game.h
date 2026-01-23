@@ -16,6 +16,7 @@ private:
 	void update(float deltaTime);
 	void render();
 	void resetBall();
+	void onResize(const sf::Vector2u& newSize);
 
 	float gameOverTimer_ = 0.f;
 

@@ -32,10 +32,11 @@ void Ball::addObserver(GoalObserver* obs){
     observers_.push_back(obs);
 }
 void Ball::bounceFromPaddle(const Paddle& paddle) {
-    float paddleCenter = paddle.getPosition().y + paddle.getSize().y / 2.f;
+    float paddleHeight = paddle.getBounds().size.y;
+    float paddleCenter = paddle.getPosition().y;
     float ballCenter = position_.y + ballShape_.getRadius();
 
-    float offset = (ballCenter - paddleCenter) / (paddle.getSize().y / 2.f);
+    float offset = (ballCenter - paddleCenter) / (paddleHeight / 2.f);
     auto pBounds = paddle.getBounds();
 
     velocity_.x = -velocity_.x;
@@ -88,4 +89,10 @@ void Ball::checkBoundsCollision(const sf::Vector2u& windowSize) {
         position_.y = (float)windowSize.y - radius;
         velocity_.y = -std::abs(velocity_.y);
     }
+}
+void Ball::setScale(const sf::Vector2f& factors) {
+    ballShape_.setScale(factors); 
+}
+float Ball::updateSpeed(float scale) {
+    return speed_ = baseSpeed_ * scale;
 }

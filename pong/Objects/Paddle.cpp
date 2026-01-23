@@ -63,5 +63,20 @@ void Paddle::setPosition(const sf::Vector2f& pos) {
 
 }
 float Paddle::cpuPaddleDirectionVelocity(float ballY, float cpuY) {
-	return (ballY > cpuY) ? 300.f : -300.f;
+	if (std::abs(ballY - cpuY) < 10.f)
+		return 0.f;
+		
+		return (ballY > cpuY) ? 1.f : -1.f;
 }
+void Paddle::setScale(const sf::Vector2f& factors) {
+	paddleShape_.setScale(factors);
+}
+float Paddle::getSpeed() {
+	return speed_;
+}
+float Paddle::updateSpeed(float scale){
+	return speed_ = baseSpeed_*scale;
+}
+//void Paddle::resetPosition() {
+//	paddleShape_.setPosition();
+//}
