@@ -48,9 +48,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Objects\pong.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="texturing\SkinFactory.cpp">
       <Filter>Source Files\texturing</Filter>
     </ClCompile>
@@ -71,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="common\Game\Game.cpp">
       <Filter>Source Files\common\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="pong.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
