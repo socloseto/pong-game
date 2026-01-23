@@ -62,3 +62,6 @@ void Paddle::setPosition(const sf::Vector2f& pos) {
 	paddleShape_.setPosition(pos);
 
 }
+float Paddle::cpuPaddleDirectionVelocity(float ballY, float cpuY) {
+	return (ballY > cpuY) ? 300.f : -300.f;
+}

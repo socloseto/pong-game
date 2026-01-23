@@ -11,11 +11,9 @@ Ball::Ball() {
     ballShape_.setFillColor(sf::Color::White);
 }
 void Ball::update(float deltaTime, const sf::RenderWindow &window) {
-
+    float windowHeight = (float)window.getSize().y;
     position_ += velocity_ * deltaTime;
-    if (position_.y <= 0 || position_.y + ballShape_.getRadius() * 2.f >= window.getSize().y) {
-        velocity_.y = -velocity_.y;
-    }
+    this->checkBoundsCollision(window.getSize());
     if (position_.x < 0) {
         notifyGoal(GoalObserver::Side::Left);
     }
@@ -38,8 +36,16 @@ void Ball::bounceFromPaddle(const Paddle& paddle) {
     float ballCenter = position_.y + ballShape_.getRadius();
 
     float offset = (ballCenter - paddleCenter) / (paddle.getSize().y / 2.f);
+    auto pBounds = paddle.getBounds();
 
     velocity_.x = -velocity_.x;
+    if (velocity_.x > 0) {
+        setPosition({ pBounds.position.x + pBounds.size.x + ballShape_.getRadius() * 2.f, position_.y });
+    }
+    else {
+        setPosition({ pBounds.position.x - ballShape_.getRadius()*2.f, position_.y });
+    }
+
     velocity_.y = speed_ * offset;
 }
 
@@ -71,4 +77,15 @@ sf::Vector2f Ball::getPosition() const {
 void Ball::setPosition(const sf::Vector2f &pos) {
     position_ = pos;
     ballShape_.setPosition(position_);
+}
+void Ball::checkBoundsCollision(const sf::Vector2u& windowSize) {
+    float radius = ballShape_.getRadius();
+    if (position_.y - radius < 0.f) {
+        position_.y = radius;
+        velocity_.y = std::abs(velocity_.y);
+    }
+    if (position_.y + radius > (float)windowSize.y) {
+        position_.y = (float)windowSize.y - radius;
+        velocity_.y = -std::abs(velocity_.y);
+    }
 }

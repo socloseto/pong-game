@@ -1,5 +1,7 @@
 #pragma once
 #include "GameObject.h"
+#include "Ball.h"
+
 class Paddle : public GameObject {
 
 public:
@@ -22,4 +24,5 @@ public:
 	sf::Vector2f getPosition() const;
 	void setPosition(const sf::Vector2f& pos);
 	void move(float offsetX, float offsetY);
+	float cpuPaddleDirectionVelocity(float BallY, float CpuY );
 };

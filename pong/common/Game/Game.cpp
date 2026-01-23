@@ -93,10 +93,8 @@ void Game::update(float deltaTime) {
 		if (ball_.getBounds().findIntersection(cpu_.getBounds())) {
 			ball_.bounceFromPaddle(cpu_);
 		}
-		float ballY = ball_.getPosition().y;
-		float cpuY = cpu_.getPosition().y;
-		if (ballY > cpuY) cpu_.move(0, 300.f * deltaTime);
-		else cpu_.move(0, -300.f * deltaTime);
+		cpu_.move(0, cpu_.cpuPaddleDirectionVelocity(ball_.getPosition().y, cpu_.getPosition().y) * deltaTime);
+
 	}
 	if (state_ == GameState::GameOver) {
 		gameOverTimer_ += deltaTime;

@@ -28,4 +28,5 @@ public:
 	sf::FloatRect getBounds() const;
 	sf::Vector2f getPosition() const;
 	void setPosition(const sf::Vector2f& pos);
+	void checkBoundsCollision(const sf::Vector2u& windowSize);
 };
