@@ -5,94 +5,94 @@
 #include "../common/Utils.h"
 
 Ball::Ball() {
-    float radius = 10.f;
-    ballShape_.setRadius(radius);
-    centerOrigin(ballShape_);
-    ballShape_.setFillColor(sf::Color::White);
+	float radius = 10.f;
+	ballShape_.setRadius(radius);
+	centerOrigin(ballShape_);
+	ballShape_.setFillColor(sf::Color::White);
 }
-void Ball::update(float deltaTime, const sf::RenderWindow &window) {
-    float windowHeight = (float)window.getSize().y;
-    position_ += velocity_ * deltaTime;
-    this->checkBoundsCollision(window.getSize());
-    if (position_.x < 0) {
-        notifyGoal(GoalObserver::Side::Left);
-    }
-    else if (position_.x > window.getSize().x) {
-        notifyGoal(GoalObserver::Side::Right);
-    }
+void Ball::update(float deltaTime, const sf::RenderWindow& window) {
+	float windowHeight = (float)window.getSize().y;
+	position_ += velocity_ * deltaTime;
+	this->checkBoundsCollision(window.getSize());
+	if (position_.x < 0) {
+		notifyGoal(GoalObserver::Side::Left);
+	}
+	else if (position_.x > window.getSize().x) {
+		notifyGoal(GoalObserver::Side::Right);
+	}
 
-    ballShape_.setPosition(position_);
+	ballShape_.setPosition(position_);
 }
 void Ball::notifyGoal(GoalObserver::Side side) {
-    for (auto obs : observers_) {
-        obs->onGoal(side);
-    }
+	for (auto obs : observers_) {
+		obs->onGoal(side);
+	}
 }
-void Ball::addObserver(GoalObserver* obs){ 
-    observers_.push_back(obs);
+void Ball::addObserver(GoalObserver* obs) {
+	observers_.push_back(obs);
 }
 void Ball::bounceFromPaddle(const Paddle& paddle) {
-    float paddleHeight = paddle.getBounds().size.y;
-    float paddleCenter = paddle.getPosition().y;
-    float ballCenter = position_.y + ballShape_.getRadius();
+	float paddleHeight = paddle.getBounds().size.y;
+	float paddleCenter = paddle.getPosition().y;
+	float ballCenter = position_.y + ballShape_.getRadius();
 
-    float offset = (ballCenter - paddleCenter) / (paddleHeight / 2.f);
-    auto pBounds = paddle.getBounds();
+	float offset = (ballCenter - paddleCenter) / (paddleHeight / 2.f);
+	auto pBounds = paddle.getBounds();
 
-    velocity_.x = -velocity_.x;
-    if (velocity_.x > 0) {
-        setPosition({ pBounds.position.x + pBounds.size.x + ballShape_.getRadius() * 2.f, position_.y });
-    }
-    else {
-        setPosition({ pBounds.position.x - ballShape_.getRadius()*2.f, position_.y });
-    }
+	velocity_.x = -velocity_.x;
+	if (velocity_.x > 0) {
+		setPosition({ pBounds.position.x + pBounds.size.x + ballShape_.getRadius() * 2.f, position_.y });
+	}
+	else {
+		setPosition({ pBounds.position.x - ballShape_.getRadius() * 2.f, position_.y });
+	}
 
-    velocity_.y = speed_ * offset;
+	velocity_.y = speed_ * offset;
 }
 
-void Ball::setSkin(std::unique_ptr<BallSkin> newSkin){
-    if (!newSkin) {
-        throw std::runtime_error("Ball Error: Attempted to set a null skin!");
-        ballShape_.setFillColor(sf::Color::White);
-    }
-    this->skin_ = std::move(newSkin);
-    skin_->apply(ballShape_);
+void Ball::setSkin(std::unique_ptr<BallSkin> newSkin) {
+	if (!newSkin) {
+		throw std::runtime_error("Ball Error: Attempted to set a null skin!");
+		ballShape_.setFillColor(sf::Color::White);
+	}
+	this->skin_ = std::move(newSkin);
+	skin_->apply(ballShape_);
 }
 void Ball::draw(sf::RenderWindow& window) {
-    window.draw(ballShape_);
+	window.draw(ballShape_);
 }
 
-void Ball::resetPosition(const sf::Vector2f &pos) {
-    setPosition(pos);
-    float dirX = (rand() % 2 == 0) ? speed_ : -speed_;
-    float dirY = static_cast<float>((rand() % 200) - 100);
-    velocity_ = { dirX, dirY };
+void Ball::resetPosition(const sf::Vector2f& pos) {
+	setPosition(pos);
+	float dirX = (rand() % 2 == 0) ? speed_ : -speed_;
+	float dirY = static_cast<float>((rand() % 200) - 100);
+	velocity_ = { dirX, dirY };
 
 }
 sf::FloatRect Ball::getBounds() const {
-    return ballShape_.getGlobalBounds();
+	return ballShape_.getGlobalBounds();
 }
 sf::Vector2f Ball::getPosition() const {
-    return position_; 
+	return position_;
 }
-void Ball::setPosition(const sf::Vector2f &pos) {
-    position_ = pos;
-    ballShape_.setPosition(position_);
+void Ball::setPosition(const sf::Vector2f& pos) {
+	position_ = pos;
+	ballShape_.setPosition(position_);
 }
 void Ball::checkBoundsCollision(const sf::Vector2u& windowSize) {
-    float radius = ballShape_.getRadius();
-    if (position_.y - radius < 0.f) {
-        position_.y = radius;
-        velocity_.y = std::abs(velocity_.y);
-    }
-    if (position_.y + radius > (float)windowSize.y) {
-        position_.y = (float)windowSize.y - radius;
-        velocity_.y = -std::abs(velocity_.y);
-    }
+	float radius = ballShape_.getRadius();
+	if (position_.y - radius < 0.f) {
+		position_.y = radius;
+		velocity_.y = std::abs(velocity_.y);
+	}
+	if (position_.y + radius > (float)windowSize.y) {
+		position_.y = (float)windowSize.y - radius;
+		velocity_.y = -std::abs(velocity_.y);
+	}
 }
 void Ball::setScale(const sf::Vector2f& factors) {
-    ballShape_.setScale(factors); 
+	ballShape_.setScale(factors);
 }
 float Ball::updateSpeed(float scale) {
-    return speed_ = baseSpeed_ * scale;
+	return speed_ = baseSpeed_ * scale;
 }

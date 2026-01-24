@@ -11,8 +11,8 @@ Paddle::Paddle() {
 sf::Vector2f Paddle::getPosition() const {
 	return position_;
 }
-sf::Vector2f Paddle::getSize() const { 
-	return paddleShape_.getSize(); 
+sf::Vector2f Paddle::getSize() const {
+	return paddleShape_.getSize();
 }
 void Paddle::draw(sf::RenderWindow& window) {
 	window.draw(paddleShape_);
@@ -47,7 +47,7 @@ void Paddle::handleInput() {
 		direction_ = Direction::Up;
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
-		direction_= Direction::Down;
+		direction_ = Direction::Down;
 	}
 }
 sf::FloatRect Paddle::getBounds() const {
@@ -63,10 +63,13 @@ void Paddle::setPosition(const sf::Vector2f& pos) {
 
 }
 float Paddle::cpuPaddleDirectionVelocity(float ballY, float cpuY) {
+	float scale = paddleShape_.getScale().y;
+	float deadZone = 15.f * scale;
+
 	if (std::abs(ballY - cpuY) < 10.f)
 		return 0.f;
-		
-		return (ballY > cpuY) ? 1.f : -1.f;
+
+	return (ballY > cpuY) ? 1.f : -1.f;
 }
 void Paddle::setScale(const sf::Vector2f& factors) {
 	paddleShape_.setScale(factors);
@@ -74,9 +77,6 @@ void Paddle::setScale(const sf::Vector2f& factors) {
 float Paddle::getSpeed() {
 	return speed_;
 }
-float Paddle::updateSpeed(float scale){
-	return speed_ = baseSpeed_*scale;
+float Paddle::updateSpeed(float scale) {
+	return speed_ = baseSpeed_ * scale;
 }
-//void Paddle::resetPosition() {
-//	paddleShape_.setPosition();
-//}

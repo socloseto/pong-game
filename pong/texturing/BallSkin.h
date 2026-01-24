@@ -3,6 +3,6 @@
 class BallSkin {
 public:
 	virtual ~BallSkin() = default;
-	virtual void apply(sf::CircleShape &ballShape)=0;
+	virtual void apply(sf::CircleShape& ballShape) = 0;
 
 };

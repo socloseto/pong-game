@@ -31,7 +31,7 @@ SkinsMenu::SkinsMenu() : title_(FontManager::getFont()) {
 
 
 SkinFactory::ballSkinType SkinsMenu::getSkinType(int index) const {
-	
+
 	if (index >= 0 && index < (int)items_.size()) {
 		return items_[index].type;
 	}

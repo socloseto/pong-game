@@ -4,6 +4,6 @@
 class TextPanel {
 
 public:
-	virtual ~TextPanel()=default;
+	virtual ~TextPanel() = default;
 	virtual void draw(sf::RenderWindow& window) = 0;
 };

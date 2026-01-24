@@ -6,7 +6,7 @@
 #include "../../ui/ScorePanel.h"
 #include <iostream>
 #include <stdexcept>
- 
+
 class Game {
 public:
 	Game();
@@ -28,6 +28,6 @@ private:
 	ScorePanel score_;
 	SkinsMenu skinsMenu_;
 
-	enum class GameState{Menu,Playing, GameOver};
+	enum class GameState { Menu, Playing, GameOver };
 	GameState state_ = GameState::Menu;
 };

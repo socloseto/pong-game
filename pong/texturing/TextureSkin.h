@@ -1,11 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "BallSkin.h"
-class TextureSkin:public BallSkin {
+class TextureSkin :public BallSkin {
 	sf::Texture texture_;
 
-public:	
+public:
 	TextureSkin(const std::string& path);
 	void apply(sf::CircleShape& ballShape) override;
-	
+
 };

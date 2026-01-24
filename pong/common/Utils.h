@@ -13,11 +13,11 @@ void centerOrigin(T& object) {
 		});
 }
 
-static sf::Vector2f getWindowCenter(const sf::RenderWindow &window) {
+static sf::Vector2f getWindowCenter(const sf::RenderWindow& window) {
 	return { window.getSize().x / 2.0f, window.getSize().y / 2.0f };
 }
 template <typename T>
-void positionAtCenter(T &object, const sf::RenderWindow& window) {
+void positionAtCenter(T& object, const sf::RenderWindow& window) {
 	centerOrigin(object);
 	object.setPosition(getWindowCenter(window));
 }
@@ -30,8 +30,8 @@ public:
 		static bool isLoaded = false;
 		if (!isLoaded) {
 			const std::string fontPath = "fonts/Roboto-Black.ttf";
-			if(!font.openFromFile(fontPath)){
-				throw std::runtime_error("Failed to load font"+fontPath);
+			if (!font.openFromFile(fontPath)) {
+				throw std::runtime_error("Failed to load font" + fontPath);
 			}
 			isLoaded = true;
 		}

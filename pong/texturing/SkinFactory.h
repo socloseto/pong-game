@@ -12,7 +12,7 @@ public:
 		CrackedEye,
 
 	};
-	
+
 	static	std::unique_ptr<BallSkin> CreateSkin(ballSkinType TextureSkin);
 
 };

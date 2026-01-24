@@ -11,8 +11,8 @@ class Ball : public GameObject {
 
 private:
 	std::unique_ptr<BallSkin> skin_;
-	const float baseSpeed_ = 400.f;
-	float speed_ = 400.f;
+	const float baseSpeed_ = 700.f;
+	float speed_ = 700.f;
 	bool isOut_ = false;
 	sf::CircleShape ballShape_;
 	std::vector<GoalObserver*>observers_;

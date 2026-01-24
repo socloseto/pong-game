@@ -6,6 +6,7 @@
 Game::Game() :
 	window_(sf::VideoMode({ 800,600 }), "Pong"), score_(40) {
 	window_.setFramerateLimit(60);
+	window_.setMinimumSize(sf::Vector2u{ 800, 600 });
 	sf::Vector2f center = getWindowCenter(window_);
 	score_.setPositionAtCenter(window_);
 	ball_.addObserver(&score_);
@@ -14,10 +15,9 @@ Game::Game() :
 	cpu_.setPosition({ window_.getSize().x - 40.f , center.y });
 	resetBall();
 }
-void Game::run(){
+void Game::run() {
 	sf::Clock clock;
 	while (window_.isOpen()) {
-
 		float dt = clock.restart().asSeconds();
 		processInput();
 		update(dt);
@@ -44,10 +44,10 @@ void Game::processInput() {
 					if (skinIdx != -1) {
 						auto skin = SkinFactory::CreateSkin(skinsMenu_.getSkinType(skinIdx));
 						try {
-							
-						ball_.setSkin(std::move(skin));
-						state_ = GameState::Playing;
-						resetBall();
+
+							ball_.setSkin(std::move(skin));
+							state_ = GameState::Playing;
+							resetBall();
 						}
 						catch (const std::runtime_error& e) {
 
@@ -64,7 +64,7 @@ void Game::processInput() {
 			if (gameOverTimer_ > 1.f) {
 				if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>()) {
 
-					score_.reset();
+					score_.reset(window_);
 					resetBall();
 					state_ = GameState::Playing;
 				}
@@ -75,21 +75,23 @@ void Game::processInput() {
 void Game::update(float deltaTime) {
 	if (state_ == GameState::Playing) {
 		ball_.update(deltaTime, window_);
-		player_.update(deltaTime,window_);
+		player_.update(deltaTime, window_);
 		cpu_.update(deltaTime, window_);
-		if (score_.getLeftScore() >= 11) {
+		score_.updateScore();
+		const short winConditionState = 11;
+		if (score_.getLeftScore() >= winConditionState) {
 			state_ = GameState::GameOver;
 			gameOverTimer_ = 0.f;
-			score_.showFinalMessage("YOU WIN! Press Any Key To RESTART");	
+			score_.showFinalMessage("YOU WIN! Press Any Key To RESTART");
 		}
-		else if (score_.getRightScore() >= 11) {
+		else if (score_.getRightScore() >= winConditionState) {
 			state_ = GameState::GameOver;
 			gameOverTimer_ = 0.f;
 			score_.showFinalMessage("YOU LOSE! Press Any Key To RESTART");
 		}
 		if (ball_.getPosition().x < 0 || ball_.getPosition().x > window_.getSize().x) {
 			resetBall();
-			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f});
+			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f });
 			cpu_.setPosition({ cpu_.getPosition().x,  window_.getSize().y / 2.f });
 		}
 		if (ball_.getBounds().findIntersection(player_.getBounds())) {
@@ -104,7 +106,7 @@ void Game::update(float deltaTime) {
 	}
 	if (state_ == GameState::GameOver) {
 		gameOverTimer_ += deltaTime;
-	
+
 	}
 }
 void Game::render() {
@@ -141,7 +143,7 @@ void Game::onResize(const sf::Vector2u& newSize) {
 
 	player_.setPosition({ 40.f * scale, h / 2.f });
 	cpu_.setPosition({ w - (40.f * scale), h / 2.f });
-	ball_.updateSpeed(scale*1.8f);
+	ball_.updateSpeed(scale);
 	resetBall();
 	player_.updateSpeed(scale);
 	cpu_.updateSpeed(scale);

@@ -12,7 +12,8 @@ class SkinsMenu {
 		SkinFactory::ballSkinType type;
 
 		MenuItem(sf::Text&& t, SkinFactory::ballSkinType type)
-			: text(std::move(t)), type(type) {}
+			: text(std::move(t)), type(type) {
+		}
 	};
 	std::vector<MenuItem> items_;
 	int hoveredIndex_ = -1;

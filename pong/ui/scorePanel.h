@@ -4,12 +4,12 @@
 #include "TextPanel.h"
 #include "../common/GoalObserver.h"
 
-class ScorePanel: public TextPanel,public GoalObserver{
+class ScorePanel : public TextPanel, public GoalObserver {
 	sf::Text scoreDisplay;
 	short leftPlayerScore;
 	short rightPlayerScore;
 public:
-	ScorePanel( unsigned size);
+	ScorePanel(unsigned size);
 	void onGoal(Side side) override;
 	void addLeftPoint();
 	void addRightPoint();
@@ -19,5 +19,5 @@ public:
 	void draw(sf::RenderWindow& window)override;
 	void showFinalMessage(const std::string& message);
 	void setPositionAtCenter(const sf::RenderWindow& window);
-	void reset();
+	void reset(const sf::RenderWindow& window);
 };
