@@ -29,7 +29,7 @@ public:
 		static sf::Font font;
 		static bool isLoaded = false;
 		if (!isLoaded) {
-			const std::string fontPath = "fonts/Roboto-Black.ttf";
+			const std::string fontPath = "assets/fonts/Roboto-Black.ttf";
 			if (!font.openFromFile(fontPath)) {
 				throw std::runtime_error("Failed to load font" + fontPath);
 			}

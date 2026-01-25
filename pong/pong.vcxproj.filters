@@ -46,6 +46,12 @@
     <Filter Include="Source Files\common\Game">
       <UniqueIdentifier>{d3bd2e64-04f0-43b3-89d2-2650d2bf8ed8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\audio">
+      <UniqueIdentifier>{9486a63a-7354-4949-afc2-4ef2ea80c511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\audio">
+      <UniqueIdentifier>{96a93d9d-1b21-479b-a813-088270164495}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="texturing\SkinFactory.cpp">
@@ -71,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="pong.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="audio\AudioManager.cpp">
+      <Filter>Source Files\audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,6 +122,9 @@
     <ClInclude Include="common\Game\Game.h">
       <Filter>Header Files\common</Filter>
     </ClInclude>
+    <ClInclude Include="audio\AudioManager.h">
+      <Filter>Header Files\audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pong.rc">
@@ -120,25 +132,23 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\BlueEye.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="assets\images\BlueEye.png">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\CrackedEye.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="assets\images\CrackedEye.png">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\Watermelon.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="assets\images\CyclopeEye.png">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\DonutEye.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="assets\images\DonutEye.png">
+      <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="images\CyclopEye.png">
-      <Filter>Resource Files\images</Filter>
+    <Image Include="assets\images\Watermelon.png">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="fonts\Roboto-Black.ttf">
-      <Filter>Resource Files\fonts</Filter>
-    </Font>
+    <Font Include="assets\fonts\Roboto-Black.ttf" />
   </ItemGroup>
 </Project>

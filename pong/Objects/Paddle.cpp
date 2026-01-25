@@ -4,7 +4,7 @@
 
 Paddle::Paddle() {
 
-	paddleShape_.setSize(sf::Vector2f(15.f, 100.f));
+	paddleShape_.setSize(sf::Vector2f(basePaddleWidth, basePaddleHeight));
 	paddleShape_.setFillColor(sf::Color::White);
 	centerOrigin(paddleShape_);
 }
@@ -64,7 +64,7 @@ void Paddle::setPosition(const sf::Vector2f& pos) {
 }
 float Paddle::cpuPaddleDirectionVelocity(float ballY, float cpuY) {
 	float scale = paddleShape_.getScale().y;
-	float deadZone = 15.f * scale;
+	float deadZone = baseDeadZone * scale;
 
 	if (std::abs(ballY - cpuY) < 10.f)
 		return 0.f;

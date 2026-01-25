@@ -13,6 +13,9 @@ public:
 private:
 	const float baseSpeed_ = 400.f;
 	float speed_ = 400;
+	float baseDeadZone = 15.f;
+	float basePaddleWidth = 15.f;
+	float basePaddleHeight = 100.f;
 	sf::RectangleShape paddleShape_;
 	Direction direction_ = Direction::None;
 public:

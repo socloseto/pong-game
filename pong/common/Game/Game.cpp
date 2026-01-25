@@ -2,18 +2,33 @@
 #include "../Utils.h"
 #include "../../texturing/SkinFactory.h"
 
-
 Game::Game() :
-	window_(sf::VideoMode({ 800,600 }), "Pong"), score_(40) {
-	window_.setFramerateLimit(60);
-	window_.setMinimumSize(sf::Vector2u{ 800, 600 });
+	window_(sf::VideoMode({ minWindowWidth,minWindowHeight }), "Pong"), score_(fontSize) {
+	window_.setFramerateLimit(framerateLimit);
+	window_.setMinimumSize(sf::Vector2u{ minWindowWidth, minWindowHeight });
 	sf::Vector2f center = getWindowCenter(window_);
 	score_.setPositionAtCenter(window_);
 	ball_.addObserver(&score_);
+	auto& audio = AudioManager::instance();
+	audio.loadSound("hit", "assets/audio/hit.ogg");
+	audio.loadSound("goal", "assets/audio/goal.ogg");
+	audio.loadSound("miss", "assets/audio/missedGoal.ogg");
+	audio.loadSound("win", "assets/audio/win.ogg");
+	audio.loadSound("lose", "assets/audio/lose.ogg");
 
-	player_.setPosition({ 40.f, center.y });
-	cpu_.setPosition({ window_.getSize().x - 40.f , center.y });
+	if (mainTheme_.openFromFile("assets/audio/mainTheme.ogg")) {
+		mainTheme_.setLooping(true);
+		audio.setMainMusic(&mainTheme_);
+		audio.setVolume(10.f);
+		mainTheme_.play();
+	}
+
+	player_.setPosition({ paddleOffsetFromSide, center.y });
+	cpu_.setPosition({ window_.getSize().x - paddleOffsetFromSide , center.y });
 	resetBall();
+}
+Game::~Game() {
+	AudioManager::instance().setMainMusic(nullptr);
 }
 void Game::run() {
 	sf::Clock clock;
@@ -28,6 +43,14 @@ void Game::processInput() {
 	while (const std::optional event = window_.pollEvent()) {
 		if (event->is<sf::Event::Closed>()) {
 			window_.close();
+		}
+		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+			if (keyPressed->code == sf::Keyboard::Key::Equal) {
+				AudioManager::instance().setVolume(AudioManager::instance().getVolume() + 5.f);
+			}
+			if (keyPressed->code == sf::Keyboard::Key::Hyphen) {
+				AudioManager::instance().setVolume(AudioManager::instance().getVolume() - 5.f);
+			}
 		}
 		if (const auto* resized = event->getIf<sf::Event::Resized>()) {
 			float newWidth = static_cast<float>(resized->size.x);
@@ -78,27 +101,37 @@ void Game::update(float deltaTime) {
 		player_.update(deltaTime, window_);
 		cpu_.update(deltaTime, window_);
 		score_.updateScore();
-		const short winConditionState = 11;
 		if (score_.getLeftScore() >= winConditionState) {
 			state_ = GameState::GameOver;
 			gameOverTimer_ = 0.f;
-			score_.showFinalMessage("YOU WIN! Press Any Key To RESTART");
+			score_.showGameOver("YOU WIN!", window_);
+			AudioManager::instance().playSound("win");
 		}
 		else if (score_.getRightScore() >= winConditionState) {
 			state_ = GameState::GameOver;
 			gameOverTimer_ = 0.f;
-			score_.showFinalMessage("YOU LOSE! Press Any Key To RESTART");
+			score_.showGameOver("YOU LOSE!", window_);
+			AudioManager::instance().playSound("lose");
 		}
-		if (ball_.getPosition().x < 0 || ball_.getPosition().x > window_.getSize().x) {
+		if (ball_.getPosition().x < 0){
+			AudioManager::instance().playSound("miss");
+			resetBall();
+			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f });
+			cpu_.setPosition({ cpu_.getPosition().x,  window_.getSize().y / 2.f });
+		}
+		else if (ball_.getPosition().x > window_.getSize().x) {
+			AudioManager::instance().playSound("goal");
 			resetBall();
 			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f });
 			cpu_.setPosition({ cpu_.getPosition().x,  window_.getSize().y / 2.f });
 		}
 		if (ball_.getBounds().findIntersection(player_.getBounds())) {
 			ball_.bounceFromPaddle(player_);
+			AudioManager::instance().playSound("hit");
 		}
 		if (ball_.getBounds().findIntersection(cpu_.getBounds())) {
 			ball_.bounceFromPaddle(cpu_);
+			AudioManager::instance().playSound("hit");
 		}
 		float direction = cpu_.cpuPaddleDirectionVelocity(ball_.getPosition().y, cpu_.getPosition().y);
 		cpu_.move(0, direction * cpu_.getSpeed() * deltaTime);
@@ -108,6 +141,7 @@ void Game::update(float deltaTime) {
 		gameOverTimer_ += deltaTime;
 
 	}
+	AudioManager::instance().update();
 }
 void Game::render() {
 	window_.clear(sf::Color::Black);
@@ -129,10 +163,9 @@ void Game::resetBall() {
 	ball_.resetPosition(center);
 }
 void Game::onResize(const sf::Vector2u& newSize) {
-	float baseHeight = 600.f;
-	float basePaddleSpeed = 450.f;
-	float scale = static_cast<float>(newSize.y) / baseHeight;
 
+	float scale = static_cast<float>(newSize.y) / minWindowHeight;
+	skinsMenu_.updateLayout({ newSize }, scale);
 	player_.setScale({ scale, scale });
 	cpu_.setScale({ scale, scale });
 	ball_.setScale({ scale, scale });
@@ -141,8 +174,8 @@ void Game::onResize(const sf::Vector2u& newSize) {
 	float w = static_cast<float>(newSize.x);
 	float h = static_cast<float>(newSize.y);
 
-	player_.setPosition({ 40.f * scale, h / 2.f });
-	cpu_.setPosition({ w - (40.f * scale), h / 2.f });
+	player_.setPosition({ paddleOffsetFromSide * scale, h / 2.f });
+	cpu_.setPosition({ w - (paddleOffsetFromSide * scale), h / 2.f });
 	ball_.updateSpeed(scale);
 	resetBall();
 	player_.updateSpeed(scale);

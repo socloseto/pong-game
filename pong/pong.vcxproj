@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audio\AudioManager.cpp" />
     <ClCompile Include="common\Game\Game.cpp" />
     <ClCompile Include="Objects\Ball.cpp" />
     <ClCompile Include="Objects\Paddle.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="texturing\TextureSkin.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audio\AudioManager.h" />
     <ClInclude Include="common\Game\Game.h" />
     <ClInclude Include="common\GoalObserver.h" />
     <ClInclude Include="Objects\Ball.h" />
@@ -165,14 +167,14 @@
     <ResourceCompile Include="pong.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\BlueEye.png" />
-    <Image Include="images\CrackedEye.png" />
-    <Image Include="images\CyclopEye.png" />
-    <Image Include="images\DonutEye.png" />
-    <Image Include="images\Watermelon.png" />
+    <Image Include="assets\images\BlueEye.png" />
+    <Image Include="assets\images\CrackedEye.png" />
+    <Image Include="assets\images\CyclopeEye.png" />
+    <Image Include="assets\images\DonutEye.png" />
+    <Image Include="assets\images\Watermelon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="fonts\Roboto-Black.ttf" />
+    <Font Include="assets\fonts\Roboto-Black.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,6 +6,9 @@
 
 class ScorePanel : public TextPanel, public GoalObserver {
 	sf::Text scoreDisplay;
+	sf::Text finalMessage_;
+	sf::Text gameOverHint_;
+	bool isGameOver_ = false;
 	short leftPlayerScore;
 	short rightPlayerScore;
 public:
@@ -17,7 +20,7 @@ public:
 	short getRightScore() const;
 	void updateScore();
 	void draw(sf::RenderWindow& window)override;
-	void showFinalMessage(const std::string& message);
 	void setPositionAtCenter(const sf::RenderWindow& window);
 	void reset(const sf::RenderWindow& window);
+	void showGameOver(const std::string& result, const sf::RenderWindow& window);
 };

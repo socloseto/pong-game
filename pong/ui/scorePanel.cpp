@@ -3,7 +3,7 @@
 #include "../common/Utils.h"
 
 ScorePanel::ScorePanel(unsigned size)
-	:leftPlayerScore(0), rightPlayerScore(0), scoreDisplay(FontManager::getFont())
+	:leftPlayerScore(0), rightPlayerScore(0), scoreDisplay(FontManager::getFont()), gameOverHint_(FontManager::getFont()), finalMessage_(FontManager::getFont())
 {
 	scoreDisplay.setCharacterSize(size);
 	scoreDisplay.setFillColor(sf::Color::White);
@@ -34,18 +34,37 @@ void ScorePanel::updateScore() {
 	centerOrigin(scoreDisplay);
 }
 void ScorePanel::draw(sf::RenderWindow& window) {
-	window.draw(scoreDisplay);
+	if (isGameOver_) {
+		window.draw(finalMessage_);
+		window.draw(gameOverHint_);
+	}
+	else{ window.draw(scoreDisplay); }
+	
 }
 void ScorePanel::setPositionAtCenter(const sf::RenderWindow& window) {
 	scoreDisplay.setPosition({ window.getSize().x / 2.f, window.getSize().y * 0.1f });
 }
-void ScorePanel::showFinalMessage(const std::string& message) {
-	scoreDisplay.setString(message);
-	scoreDisplay.setFillColor(sf::Color::Yellow);
-}
 void ScorePanel::reset(const sf::RenderWindow& window) {
+	isGameOver_ = false;
 	leftPlayerScore = 0;
 	rightPlayerScore = 0;
 	scoreDisplay.setFillColor(sf::Color::White);
 	updateScore();
+	setPositionAtCenter(window);
+}
+void ScorePanel::showGameOver(const std::string& result, const sf::RenderWindow& window) {
+	isGameOver_ = true;
+
+	
+	finalMessage_.setString(result);
+	finalMessage_.setCharacterSize(60);
+	finalMessage_.setFillColor(result == "YOU WIN!" ? sf::Color::Green : sf::Color::Red);
+	centerOrigin(finalMessage_);
+	finalMessage_.setPosition({ window.getSize().x / 2.f, window.getSize().y / 2.f - 50.f });
+
+	gameOverHint_.setString("Press Any Key to RESTART");
+	gameOverHint_.setCharacterSize(25);
+	gameOverHint_.setFillColor(sf::Color::White);
+	centerOrigin(gameOverHint_);
+	gameOverHint_.setPosition({ window.getSize().x / 2.f, window.getSize().y / 2.f + 50.f });
 }
