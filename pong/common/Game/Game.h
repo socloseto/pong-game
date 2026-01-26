@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "../../Objects/Ball.h"
 #include "../../Objects/Paddle.h"
+#include "../../Objects/GameField.h"
 #include "../../ui/SkinsMenu.h"
 #include "../../ui/ScorePanel.h"
 #include "../../audio/AudioManager.h"
@@ -24,13 +25,13 @@ private:
 	void render();
 	void resetBall();
 	void onResize(const sf::Vector2u& newSize);
-
+	const float virtualWidth = 1920.f;
+    const float virtualHeight = 1080.f;
+    const float paddleOffset = 100.f;
+    GameField field_{virtualWidth, virtualHeight};
 	float gameOverTimer_ = 0.f;
 	const unsigned short framerateLimit=60;
 	unsigned short fontSize = 40;
-	const unsigned int minWindowWidth=800;
-	const unsigned int minWindowHeight=600;
-	const float paddleOffsetFromSide = 40.f;
 	const unsigned short winConditionState = 11;
 	float basePaddleSpeed = 450.f;
 

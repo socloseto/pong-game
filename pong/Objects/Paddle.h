@@ -11,16 +11,18 @@ public:
 		Down
 	};
 private:
-	const float baseSpeed_ = 400.f;
-	float speed_ = 400;
+	const float baseSpeed_ = 700.f;
+	float speed_ = 700;
 	float baseDeadZone = 15.f;
 	float basePaddleWidth = 15.f;
 	float basePaddleHeight = 100.f;
+	const float sceneWidth = 1920.f;
+	const float sceneHeight = 1080.f;
 	sf::RectangleShape paddleShape_;
 	Direction direction_ = Direction::None;
 public:
 	Paddle();
-	void update(float deltaTime, const sf::RenderWindow& window) override;
+	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
 	void handleInput();
 	sf::FloatRect getBounds() const;
@@ -29,7 +31,5 @@ public:
 	void setPosition(const sf::Vector2f& pos);
 	void move(float offsetX, float offsetY);
 	float cpuPaddleDirectionVelocity(float BallY, float CpuY);
-	void setScale(const sf::Vector2f& factors);
 	float getSpeed();
-	float updateSpeed(float scale);
 };

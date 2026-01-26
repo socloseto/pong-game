@@ -87,6 +87,9 @@
     <ClCompile Include="audio\AudioManager.cpp">
       <Filter>Source Files\audio</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\GameField.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Objects\Ball.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="assets\audio\win_ogg.h">
       <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\GameField.h">
+      <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -48,19 +48,19 @@ SkinFactory::ballSkinType SkinsMenu::getSkinType(int index) const {
 	}
 	return SkinFactory::BlueEye;
 }
-void SkinsMenu::updateLayout(sf::Vector2u windowSize, float scale) {
+void SkinsMenu::updateLayout(sf::Vector2u windowSize) {
 	const float centerX = windowSize.x / 2.f;
 	const float titleY = windowSize.y * titleYPercent;
-	title_.setCharacterSize(static_cast<unsigned int>(skinsMenuTitleFontSize * scale));
+	title_.setCharacterSize(static_cast<unsigned int>(skinsMenuTitleFontSize));
 	centerOrigin(title_);
 	title_.setPosition({ centerX, titleY });
-	controlsHint_.setCharacterSize(static_cast<unsigned int>(20 * scale));
-	volumeHint_.setCharacterSize(static_cast<unsigned int>(18 * scale));
+	controlsHint_.setCharacterSize(static_cast<unsigned int>(20));
+	volumeHint_.setCharacterSize(static_cast<unsigned int>(20));
 	const float startY = windowSize.y * itemsStartYPercent;
 	for (size_t i = 0; i < items_.size(); i++) {
-		items_[i].text.setCharacterSize(static_cast<unsigned int>(skinsMenuItemFontSize * scale));
+		items_[i].text.setCharacterSize(static_cast<unsigned int>(skinsMenuItemFontSize));
 		centerOrigin(items_[i].text);
-		const float verticalOffset = i * (menuItemsOffset * scale);
+		const float verticalOffset = i * (menuItemsOffset);
 		items_[i].text.setPosition({ centerX, startY + verticalOffset });
 	}
 }
@@ -90,15 +90,15 @@ void SkinsMenu::draw(sf::RenderWindow& window) {
 		}
 		window.draw(items_[i].text);
 	}
-    float windowX = static_cast<float>(window.getSize().x);
-    float windowY = static_cast<float>(window.getSize().y);
-    sf::FloatRect volBounds = volumeHint_.getGlobalBounds();
-    float rightEdge = windowX * hintPercent;
-    float bottomY = windowY * hintPercent;
-    volumeHint_.setPosition({rightEdge - volBounds.size.x, bottomY});
-    window.draw(volumeHint_);
-    sf::FloatRect ctrlBounds = controlsHint_.getGlobalBounds();
-    controlsHint_.setPosition({rightEdge - ctrlBounds.size.x, bottomY - spacing});
-    window.draw(controlsHint_);
+        float rightEdge = baseWidth * hintPercent;
+        float bottomY = baseHeight * hintPercent;
+
+        sf::FloatRect volBounds = volumeHint_.getGlobalBounds();
+        volumeHint_.setPosition({rightEdge - volBounds.size.x, bottomY});
+        window.draw(volumeHint_);
+
+        sf::FloatRect ctrlBounds = controlsHint_.getGlobalBounds();
+        controlsHint_.setPosition({rightEdge - ctrlBounds.size.x, bottomY - spacing});
+        window.draw(controlsHint_);
 
 }

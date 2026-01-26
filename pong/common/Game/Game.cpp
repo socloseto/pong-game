@@ -2,8 +2,10 @@
 #include "../Utils.h"
 #include "../../texturing/SkinFactory.h"
 
-Game::Game() :
-	window_(sf::VideoMode({ minWindowWidth,minWindowHeight }), "Pong"), score_(fontSize), pauseText_(FontManager::getFont()),
+Game::Game() : window_(sf::VideoMode({static_cast<unsigned int> (virtualWidth), static_cast<unsigned int> (virtualHeight)}),
+              "Pong"),
+    score_(fontSize),
+    pauseText_(FontManager::getFont()),
 	pauseHintText_(FontManager::getFont())
 {
 
@@ -48,11 +50,13 @@ void Game::processInput() {
 		}
 		if (state_ == GameState::Menu) {
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>()) {
-				skinsMenu_.handleMouse(mouseMoved->position, false);
+				sf::Vector2f worldPos = window_.mapPixelToCoords(mouseMoved->position);
+				skinsMenu_.handleMouse(sf::Vector2i(worldPos), false);
 			}
 			if (const auto* mouseBtn = event->getIf<sf::Event::MouseButtonPressed>()) {
 				if (mouseBtn->button == sf::Mouse::Button::Left) {
-					int skinIdx = skinsMenu_.handleMouse(mouseBtn->position, true);
+					sf::Vector2f worldPos = window_.mapPixelToCoords(mouseBtn->position);
+					int skinIdx = skinsMenu_.handleMouse(sf::Vector2i(worldPos), true);
 					if (skinIdx != -1) {
 						ball_.setSkin(SkinFactory::CreateSkin(skinsMenu_.getSkinType(skinIdx)));
 						state_ = GameState::Playing;
@@ -76,9 +80,9 @@ void Game::processInput() {
 }
 void Game::update(float deltaTime) {
 	if (state_ == GameState::Playing) {
-		ball_.update(deltaTime, window_);
-		player_.update(deltaTime, window_);
-		cpu_.update(deltaTime, window_);
+		ball_.update(deltaTime);
+		player_.update(deltaTime);
+		cpu_.update(deltaTime);
 		score_.updateScore();
 		if (score_.getLeftScore() >= winConditionState) {
 			state_ = GameState::GameOver;
@@ -93,17 +97,17 @@ void Game::update(float deltaTime) {
 			AudioManager::instance().playSound("lose");
 		}
 		if (ball_.getPosition().x < 0) {
-			AudioManager::instance().playSound("miss");
-			resetBall();
-			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f });
-			cpu_.setPosition({ cpu_.getPosition().x,  window_.getSize().y / 2.f });
-		}
-		else if (ball_.getPosition().x > window_.getSize().x) {
-			AudioManager::instance().playSound("goal");
-			resetBall();
-			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f });
-			cpu_.setPosition({ cpu_.getPosition().x,  window_.getSize().y / 2.f });
-		}
+            AudioManager::instance().playSound("miss");
+            resetBall();
+            player_.setPosition({ paddleOffset, virtualHeight / 2.f });
+            cpu_.setPosition({ virtualWidth - paddleOffset, virtualHeight / 2.f });
+        }
+		else if (ball_.getPosition().x > virtualWidth) {
+            AudioManager::instance().playSound("goal");
+            resetBall();
+            player_.setPosition({ paddleOffset, virtualHeight / 2.f });
+            cpu_.setPosition({ virtualWidth - paddleOffset, virtualHeight / 2.f });
+        }
 		if (ball_.getBounds().findIntersection(player_.getBounds())) {
 			ball_.bounceFromPaddle(player_);
 			AudioManager::instance().playSound("hit");
@@ -123,59 +127,61 @@ void Game::update(float deltaTime) {
 	AudioManager::instance().update();
 }
 void Game::render() {
-	window_.clear(sf::Color::Black);
-
+	window_.clear(sf::Color(10, 10, 15));
+	sf::Vector2f sceneCenter(virtualWidth / 2.f, virtualHeight / 2.f);
 	if (state_ == GameState::Menu) {
 		skinsMenu_.draw(window_);
 	}
 	else {
+        field_.draw(window_);
 		score_.draw(window_);
 		player_.draw(window_);
 		cpu_.draw(window_);
 		ball_.draw(window_);
 
 		if (state_ == GameState::Paused) {
-			sf::Vector2f center = getWindowCenter(window_);
 
-			pauseOverlay_.setSize(sf::Vector2f(window_.getSize()));
+			pauseOverlay_.setSize({virtualWidth, virtualHeight});
+			pauseText_.setPosition(sceneCenter);
+			pauseHintText_.setPosition({ sceneCenter.x, sceneCenter.y + 100.f });
 			window_.draw(pauseOverlay_);
-
-			pauseText_.setPosition(center);
 			window_.draw(pauseText_);
-
-			pauseHintText_.setPosition({ center.x, center.y + 100.f });
 			window_.draw(pauseHintText_);
 		}
 	}
 	window_.display();
 }
 void Game::resetBall() {
-	sf::Vector2f center = getWindowCenter(window_);
-	ball_.resetPosition(center);
+  ball_.resetPosition({virtualWidth / 2.f, virtualHeight / 2.f});
 }
 void Game::onResize(const sf::Vector2u& newSize) {
+    float windowWidth = static_cast<float>(newSize.x);
+    float windowHeight = static_cast<float>(newSize.y);
+    float targetAspectRatio = 16.0f / 9.0f;
+    float windowAspectRatio = windowWidth / windowHeight;
 
-	float scale = static_cast<float>(newSize.y) / minWindowHeight;
-	skinsMenu_.updateLayout({ newSize }, scale);
-	player_.setScale({ scale, scale });
-	cpu_.setScale({ scale, scale });
-	ball_.setScale({ scale, scale });
+	sf::FloatRect viewport({0.f, 0.f}, {1.f, 1.f});
+    
+    
+	if (windowAspectRatio > targetAspectRatio) {
+		float viewWidth = targetAspectRatio / windowAspectRatio;
+		viewport.position.x = (1.0f - viewWidth) / 2.0f; 
+		viewport.size.x = viewWidth;
+	} else {
+		float viewHeight = windowAspectRatio / targetAspectRatio;
+		viewport.position.y = (1.0f - viewHeight) / 2.0f;
+		viewport.size.y = viewHeight;
+	}
 
-
-	float w = static_cast<float>(newSize.x);
-	float h = static_cast<float>(newSize.y);
-
-	player_.setPosition({ paddleOffsetFromSide * scale, h / 2.f });
-	cpu_.setPosition({ w - (paddleOffsetFromSide * scale), h / 2.f });
-	ball_.updateSpeed(scale);
-	resetBall();
-	player_.updateSpeed(scale);
-	cpu_.updateSpeed(scale);
-	score_.setPositionAtCenter(window_);
+    
+    sf::View view(sf::FloatRect({0.f, 0.f}, {1920.f, 1080.f}));
+    view.setViewport(viewport);
+    window_.setView(view);
+    score_.setPositionAtCenter(window_);
 }
 void Game::initUI() {
 	window_.setFramerateLimit(framerateLimit);
-	window_.setMinimumSize(sf::Vector2u{ minWindowWidth, minWindowHeight });
+	window_.setMinimumSize(sf::Vector2u{static_cast<unsigned int>(virtualWidth / 2),static_cast<unsigned int>(virtualHeight / 2)});
 	pauseText_.setString("PAUSE");
 	pauseText_.setCharacterSize(80);
 	pauseText_.setFillColor(sf::Color::White);
@@ -195,11 +201,9 @@ void Game::initAudio() {
 	audio.setVolume(10.f);
 }
 void Game::initEntities() {
-	sf::Vector2f center = getWindowCenter(window_);
 	ball_.addObserver(&score_);
-
-	player_.setPosition({ paddleOffsetFromSide, center.y });
-	cpu_.setPosition({ window_.getSize().x - paddleOffsetFromSide, center.y });
+	player_.setPosition({ paddleOffset, virtualHeight / 2.f });
+    cpu_.setPosition({ virtualWidth - paddleOffset, virtualHeight / 2.f });
 	resetBall();
 }
 

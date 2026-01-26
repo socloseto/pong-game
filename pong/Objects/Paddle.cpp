@@ -17,7 +17,7 @@ sf::Vector2f Paddle::getSize() const {
 void Paddle::draw(sf::RenderWindow& window) {
 	window.draw(paddleShape_);
 }
-void Paddle::update(float deltaTime, const sf::RenderWindow& window) {
+void Paddle::update(float deltaTime) {
 	if (direction_ == Direction::Up) {
 		velocity_.y = -speed_;
 	}
@@ -28,15 +28,14 @@ void Paddle::update(float deltaTime, const sf::RenderWindow& window) {
 		velocity_.y = 0.f;
 	}
 	position_ += velocity_ * deltaTime;
-	float screenHeight = static_cast<float>(window.getSize().y);
-	float paddleHeight = paddleShape_.getGlobalBounds().size.y;
-	float halfHeight = paddleHeight / 2.f;
+
+    float halfHeight = basePaddleHeight / 2.f;
 
 	if (position_.y < halfHeight) {
 		position_.y = halfHeight;
 	}
-	else if (position_.y > screenHeight - halfHeight) {
-		position_.y = screenHeight - halfHeight;
+	else if (position_.y > sceneHeight - halfHeight) {
+          position_.y = sceneHeight - halfHeight;
 	}
 	paddleShape_.setPosition(position_);
 }
@@ -63,20 +62,13 @@ void Paddle::setPosition(const sf::Vector2f& pos) {
 
 }
 float Paddle::cpuPaddleDirectionVelocity(float ballY, float cpuY) {
-	float scale = paddleShape_.getScale().y;
-	float deadZone = baseDeadZone * scale;
 
-	if (std::abs(ballY - cpuY) < 10.f)
+
+	if (std::abs(ballY - cpuY) < baseDeadZone)
 		return 0.f;
 
 	return (ballY > cpuY) ? 1.f : -1.f;
 }
-void Paddle::setScale(const sf::Vector2f& factors) {
-	paddleShape_.setScale(factors);
-}
 float Paddle::getSpeed() {
 	return speed_;
-}
-float Paddle::updateSpeed(float scale) {
-	return speed_ = baseSpeed_ * scale;
 }

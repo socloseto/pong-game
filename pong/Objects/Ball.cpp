@@ -10,18 +10,31 @@ Ball::Ball() {
 	centerOrigin(ballShape_);
 	ballShape_.setFillColor(sf::Color::White);
 }
-void Ball::update(float deltaTime, const sf::RenderWindow& window) {
-	float windowHeight = (float)window.getSize().y;
-	position_ += velocity_ * deltaTime;
-	this->checkBoundsCollision(window.getSize());
-	if (position_.x < 0) {
-		notifyGoal(GoalObserver::Side::Left);
-	}
-	else if (position_.x > window.getSize().x) {
-		notifyGoal(GoalObserver::Side::Right);
-	}
+void Ball::update(float deltaTime) {
+  position_ += velocity_ * deltaTime;
 
-	ballShape_.setPosition(position_);
+  this->checkBoundsCollision();
+
+  if (position_.x < 0.f) {
+    notifyGoal(GoalObserver::Side::Left);
+  } else if (position_.x > sceneWidth) {
+    notifyGoal(GoalObserver::Side::Right);
+  }
+
+  ballShape_.setPosition(position_);
+}
+
+void Ball::checkBoundsCollision() {
+  float radius = ballShape_.getRadius();
+  if (position_.y - radius < 0.f) {
+    position_.y = radius;
+    velocity_.y = std::abs(velocity_.y);
+  }
+
+  if (position_.y + radius > sceneHeight) {
+    position_.y = sceneHeight - radius;
+    velocity_.y = -std::abs(velocity_.y);
+  }
 }
 void Ball::notifyGoal(GoalObserver::Side side) {
 	for (auto obs : observers_) {
@@ -78,21 +91,4 @@ sf::Vector2f Ball::getPosition() const {
 void Ball::setPosition(const sf::Vector2f& pos) {
 	position_ = pos;
 	ballShape_.setPosition(position_);
-}
-void Ball::checkBoundsCollision(const sf::Vector2u& windowSize) {
-	float radius = ballShape_.getRadius();
-	if (position_.y - radius < 0.f) {
-		position_.y = radius;
-		velocity_.y = std::abs(velocity_.y);
-	}
-	if (position_.y + radius > (float)windowSize.y) {
-		position_.y = (float)windowSize.y - radius;
-		velocity_.y = -std::abs(velocity_.y);
-	}
-}
-void Ball::setScale(const sf::Vector2f& factors) {
-	ballShape_.setScale(factors);
-}
-float Ball::updateSpeed(float scale) {
-	return speed_ = baseSpeed_ * scale;
 }

@@ -11,9 +11,11 @@ class Ball : public GameObject {
 
 private:
 	std::unique_ptr<BallSkin> skin_;
-	const float baseSpeed_ = 700.f;
-	float speed_ = 700.f;
+	const float baseSpeed_ = 1000.f;
+	float speed_ = 1000.f;
 	bool isOut_ = false;
+    const float sceneWidth = 1920.f;
+	const float sceneHeight = 1080.f;
 	sf::CircleShape ballShape_;
 	std::vector<GoalObserver*>observers_;
 public:
@@ -21,7 +23,7 @@ public:
 	void addObserver(GoalObserver* obs);
 
 	void notifyGoal(GoalObserver::Side side);
-	void update(float deltaTime, const sf::RenderWindow& window) override;
+	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
 	void setSkin(std::unique_ptr<BallSkin> newSkin);
 	void bounceFromPaddle(const Paddle& paddle);
@@ -29,7 +31,6 @@ public:
 	sf::FloatRect getBounds() const;
 	sf::Vector2f getPosition() const;
 	void setPosition(const sf::Vector2f& pos);
-	void checkBoundsCollision(const sf::Vector2u& windowSize);
-	void setScale(const sf::Vector2f& factors);
-	float updateSpeed(float scale);
+	void checkBoundsCollision();
+
 };
