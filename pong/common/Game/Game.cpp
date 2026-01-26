@@ -180,7 +180,7 @@ void Game::initUI() {
 	pauseText_.setCharacterSize(80);
 	pauseText_.setFillColor(sf::Color::White);
 	centerOrigin(pauseText_);
-	pauseHintText_.setString("Press SPACE to Resume | Press ESC for Menu");
+	pauseHintText_.setString("Press SPACE or P to Resume | Press ESC for Menu");
 	pauseHintText_.setCharacterSize(20);
 	pauseHintText_.setFillColor(sf::Color(200, 200, 200));
 	centerOrigin(pauseHintText_);

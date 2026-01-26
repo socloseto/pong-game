@@ -10,7 +10,7 @@ SkinsMenu::SkinsMenu()
 	title_.setFillColor(sf::Color::Cyan);
 	centerOrigin(title_);
 	title_.setPosition({ baseWidth / 2.f, baseHeight * titleYPercent });
-	controlsHint_.setString("Press ESC to Quit | Select Skin to Start");
+	controlsHint_.setString("Press ESC to Quit | P or SPACE to pause game");
     controlsHint_.setCharacterSize(22);
     controlsHint_.setFillColor(sf::Color(200, 200, 200));
 
@@ -99,6 +99,6 @@ void SkinsMenu::draw(sf::RenderWindow& window) {
     window.draw(volumeHint_);
     sf::FloatRect ctrlBounds = controlsHint_.getGlobalBounds();
     controlsHint_.setPosition({rightEdge - ctrlBounds.size.x, bottomY - spacing});
-	window.draw(volumeHint_);
+    window.draw(controlsHint_);
 
 }
