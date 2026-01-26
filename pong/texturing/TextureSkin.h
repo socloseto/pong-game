@@ -5,7 +5,7 @@ class TextureSkin :public BallSkin {
 	sf::Texture texture_;
 
 public:
-	TextureSkin(const std::string& path);
+	TextureSkin(const unsigned char* data, unsigned int size);
 	void apply(sf::CircleShape& ballShape) override;
 
 };

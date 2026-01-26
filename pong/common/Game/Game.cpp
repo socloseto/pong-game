@@ -3,29 +3,13 @@
 #include "../../texturing/SkinFactory.h"
 
 Game::Game() :
-	window_(sf::VideoMode({ minWindowWidth,minWindowHeight }), "Pong"), score_(fontSize) {
-	window_.setFramerateLimit(framerateLimit);
-	window_.setMinimumSize(sf::Vector2u{ minWindowWidth, minWindowHeight });
-	sf::Vector2f center = getWindowCenter(window_);
-	score_.setPositionAtCenter(window_);
-	ball_.addObserver(&score_);
-	auto& audio = AudioManager::instance();
-	audio.loadSound("hit", "assets/audio/hit.ogg");
-	audio.loadSound("goal", "assets/audio/goal.ogg");
-	audio.loadSound("miss", "assets/audio/missedGoal.ogg");
-	audio.loadSound("win", "assets/audio/win.ogg");
-	audio.loadSound("lose", "assets/audio/lose.ogg");
+	window_(sf::VideoMode({ minWindowWidth,minWindowHeight }), "Pong"), score_(fontSize), pauseText_(FontManager::getFont()),
+	pauseHintText_(FontManager::getFont())
+{
 
-	if (mainTheme_.openFromFile("assets/audio/mainTheme.ogg")) {
-		mainTheme_.setLooping(true);
-		audio.setMainMusic(&mainTheme_);
-		audio.setVolume(10.f);
-		mainTheme_.play();
-	}
-
-	player_.setPosition({ paddleOffsetFromSide, center.y });
-	cpu_.setPosition({ window_.getSize().x - paddleOffsetFromSide , center.y });
-	resetBall();
+	initUI();
+	initAudio();
+	initEntities();
 }
 Game::~Game() {
 	AudioManager::instance().setMainMusic(nullptr);
@@ -44,49 +28,44 @@ void Game::processInput() {
 		if (event->is<sf::Event::Closed>()) {
 			window_.close();
 		}
-		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
-			if (keyPressed->code == sf::Keyboard::Key::Equal) {
-				AudioManager::instance().setVolume(AudioManager::instance().getVolume() + 5.f);
-			}
-			if (keyPressed->code == sf::Keyboard::Key::Hyphen) {
-				AudioManager::instance().setVolume(AudioManager::instance().getVolume() - 5.f);
-			}
-		}
+
 		if (const auto* resized = event->getIf<sf::Event::Resized>()) {
-			float newWidth = static_cast<float>(resized->size.x);
-			float newHeight = static_cast<float>(resized->size.y);
-			sf::View view(sf::FloatRect({ 0.f, 0.f }, { newWidth, newHeight }));
+			sf::View view(sf::FloatRect({ 0.f, 0.f }, { static_cast<float>(resized->size.x), static_cast<float>(resized->size.y) }));
 			window_.setView(view);
 			this->onResize(resized->size);
 		}
+
+		if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+			if (keyPressed->code == sf::Keyboard::Key::Escape) {
+				if (state_ == GameState::Menu) window_.close();
+				else { state_ = GameState::Menu; resetBall(); }
+			}
+			if (keyPressed->code == sf::Keyboard::Key::Space || keyPressed->code == sf::Keyboard::Key::P) {
+				togglePause();
+			}
+			if (keyPressed->code == sf::Keyboard::Key::Equal) AudioManager::instance().setVolume(AudioManager::instance().getVolume() + 5.f);
+			if (keyPressed->code == sf::Keyboard::Key::Hyphen) AudioManager::instance().setVolume(AudioManager::instance().getVolume() - 5.f);
+		}
 		if (state_ == GameState::Menu) {
+			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>()) {
+				skinsMenu_.handleMouse(mouseMoved->position, false);
+			}
 			if (const auto* mouseBtn = event->getIf<sf::Event::MouseButtonPressed>()) {
 				if (mouseBtn->button == sf::Mouse::Button::Left) {
-					sf::Vector2i mousePos = sf::Mouse::getPosition(window_);
-					int skinIdx = skinsMenu_.handleMouse(mousePos, true);
+					int skinIdx = skinsMenu_.handleMouse(mouseBtn->position, true);
 					if (skinIdx != -1) {
-						auto skin = SkinFactory::CreateSkin(skinsMenu_.getSkinType(skinIdx));
-						try {
-
-							ball_.setSkin(std::move(skin));
-							state_ = GameState::Playing;
-							resetBall();
-						}
-						catch (const std::runtime_error& e) {
-
-							std::cerr << "Skin error: " << e.what() << std::endl;
-						}
+						ball_.setSkin(SkinFactory::CreateSkin(skinsMenu_.getSkinType(skinIdx)));
+						state_ = GameState::Playing;
 					}
 				}
 			}
 		}
-		if (state_ == GameState::Playing) {
+		else if (state_ == GameState::Playing) {
 			player_.handleInput();
 		}
-		if (state_ == GameState::GameOver) {
+		else if (state_ == GameState::GameOver) {
 			if (gameOverTimer_ > 1.f) {
 				if (event->is<sf::Event::KeyPressed>() || event->is<sf::Event::MouseButtonPressed>()) {
-
 					score_.reset(window_);
 					resetBall();
 					state_ = GameState::Playing;
@@ -113,7 +92,7 @@ void Game::update(float deltaTime) {
 			score_.showGameOver("YOU LOSE!", window_);
 			AudioManager::instance().playSound("lose");
 		}
-		if (ball_.getPosition().x < 0){
+		if (ball_.getPosition().x < 0) {
 			AudioManager::instance().playSound("miss");
 			resetBall();
 			player_.setPosition({ player_.getPosition().x, window_.getSize().y / 2.f });
@@ -154,8 +133,20 @@ void Game::render() {
 		player_.draw(window_);
 		cpu_.draw(window_);
 		ball_.draw(window_);
-	}
 
+		if (state_ == GameState::Paused) {
+			sf::Vector2f center = getWindowCenter(window_);
+
+			pauseOverlay_.setSize(sf::Vector2f(window_.getSize()));
+			window_.draw(pauseOverlay_);
+
+			pauseText_.setPosition(center);
+			window_.draw(pauseText_);
+
+			pauseHintText_.setPosition({ center.x, center.y + 100.f });
+			window_.draw(pauseHintText_);
+		}
+	}
 	window_.display();
 }
 void Game::resetBall() {
@@ -181,4 +172,38 @@ void Game::onResize(const sf::Vector2u& newSize) {
 	player_.updateSpeed(scale);
 	cpu_.updateSpeed(scale);
 	score_.setPositionAtCenter(window_);
+}
+void Game::initUI() {
+	window_.setFramerateLimit(framerateLimit);
+	window_.setMinimumSize(sf::Vector2u{ minWindowWidth, minWindowHeight });
+	pauseText_.setString("PAUSE");
+	pauseText_.setCharacterSize(80);
+	pauseText_.setFillColor(sf::Color::White);
+	centerOrigin(pauseText_);
+	pauseHintText_.setString("Press SPACE to Resume | Press ESC for Menu");
+	pauseHintText_.setCharacterSize(20);
+	pauseHintText_.setFillColor(sf::Color(200, 200, 200));
+	centerOrigin(pauseHintText_);
+	pauseOverlay_.setFillColor(sf::Color(0, 0, 0, 150));
+
+	score_.setPositionAtCenter(window_);
+}
+void Game::initAudio() {
+	auto& audio = AudioManager::instance();
+	audio.loadAllEmbeddedAssets();
+	audio.setupMainMusic(mainTheme_);
+	audio.setVolume(10.f);
+}
+void Game::initEntities() {
+	sf::Vector2f center = getWindowCenter(window_);
+	ball_.addObserver(&score_);
+
+	player_.setPosition({ paddleOffsetFromSide, center.y });
+	cpu_.setPosition({ window_.getSize().x - paddleOffsetFromSide, center.y });
+	resetBall();
+}
+
+void Game::togglePause() {
+	if (state_ == GameState::Playing) state_ = GameState::Paused;
+	else if (state_ == GameState::Paused) state_ = GameState::Playing;
 }

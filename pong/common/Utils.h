@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-
+#include "../assets/fonts/Roboto-Black_ttf.h"
 
 template <typename T>
 void centerOrigin(T& object) {
@@ -29,9 +29,8 @@ public:
 		static sf::Font font;
 		static bool isLoaded = false;
 		if (!isLoaded) {
-			const std::string fontPath = "assets/fonts/Roboto-Black.ttf";
-			if (!font.openFromFile(fontPath)) {
-				throw std::runtime_error("Failed to load font" + fontPath);
+			if (!font.openFromMemory(Roboto_Black_ttf, Roboto_Black_ttf_len)) {
+				throw std::runtime_error("Failed to load embedded font from memory");
 			}
 			isLoaded = true;
 		}

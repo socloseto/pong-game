@@ -8,11 +8,11 @@
 class AudioManager {
 public:
     static AudioManager& instance();
-
-    bool loadSound(const std::string& name, const std::string& filename);
+    bool loadSoundFromMemory(const std::string& name, const unsigned char* data, size_t size);
+    void loadAllEmbeddedAssets();
     void playSound(const std::string& name);
     void update();
-
+    void setupMainMusic(sf::Music& music);
     void setMainMusic(sf::Music* music);
     void setVolume(float volume);
     float getVolume() const;

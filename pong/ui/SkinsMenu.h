@@ -7,6 +7,7 @@ class SkinsMenu {
 
 	sf::Text title_;
 	sf::Text volumeHint_;
+    sf::Text controlsHint_;
 	unsigned short skinsMenuTitleFontSize = 50;
 	unsigned short skinsMenuItemFontSize = 50;
 	float menuItemsOffset = 60.f;
@@ -15,6 +16,7 @@ class SkinsMenu {
 	const float baseWidth = 800.f;
 	const float baseHeight = 600.f;
 	const float hintPercent = 0.9f;
+    float spacing = 30.f;
 	struct MenuItem
 	{
 		sf::Text text;

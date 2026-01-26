@@ -52,6 +52,12 @@
     <Filter Include="Header Files\audio">
       <UniqueIdentifier>{96a93d9d-1b21-479b-a813-088270164495}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\audio">
+      <UniqueIdentifier>{2efef333-3018-4672-b206-715ffb2cb4c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EmbeddedAssets">
+      <UniqueIdentifier>{715c1904-2224-47b2-b7a7-7ae6e0a570ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="texturing\SkinFactory.cpp">
@@ -125,6 +131,42 @@
     <ClInclude Include="audio\AudioManager.h">
       <Filter>Header Files\audio</Filter>
     </ClInclude>
+    <ClInclude Include="assets\images\BlueEye_png.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\images\CrackedEye_png.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\images\CyclopeEye_png.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\images\DonutEye_png.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\audio\goal_ogg.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\audio\hit_ogg.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\audio\lose_ogg.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\audio\mainTheme_ogg.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\audio\missedGoal_ogg.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\images\Watermelon_png.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\fonts\Roboto-Black_ttf.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
+    <ClInclude Include="assets\audio\win_ogg.h">
+      <Filter>EmbeddedAssets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="pong.rc">
@@ -133,22 +175,24 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\BlueEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="assets\images\CrackedEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="assets\images\CyclopeEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="assets\images\DonutEye.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
     <Image Include="assets\images\Watermelon.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="assets\fonts\Roboto-Black.ttf" />
+    <Font Include="assets\fonts\Roboto-Black.ttf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

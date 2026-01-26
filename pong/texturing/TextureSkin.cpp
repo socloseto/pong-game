@@ -1,10 +1,10 @@
 #include "TextureSkin.h"
 #include <stdexcept>
 
-TextureSkin::TextureSkin(const std::string& path) {
-	if (!texture_.loadFromFile(path)) {
+TextureSkin::TextureSkin(const unsigned char* data, unsigned int size) {
+	if (!texture_.loadFromMemory(data, size)) {
 
-		throw std::runtime_error("Critical error: Failed to load texture" + path);
+		throw std::runtime_error("Critical error: Failed to load texture from memory");
 	}
 
 }

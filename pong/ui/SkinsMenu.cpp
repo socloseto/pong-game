@@ -1,12 +1,19 @@
 #include "SkinsMenu.h"
 #include "../common/Utils.h"
 
-SkinsMenu::SkinsMenu() : title_(FontManager::getFont()),volumeHint_(FontManager::getFont()) {
+SkinsMenu::SkinsMenu()
+    : title_(FontManager::getFont()),
+      volumeHint_(FontManager::getFont()),
+      controlsHint_(FontManager::getFont()) {
 	title_.setString("CHOOSE YOUR SKIN");
 	title_.setCharacterSize(skinsMenuTitleFontSize);
 	title_.setFillColor(sf::Color::Cyan);
 	centerOrigin(title_);
 	title_.setPosition({ baseWidth / 2.f, baseHeight * titleYPercent });
+	controlsHint_.setString("Press ESC to Quit | Select Skin to Start");
+    controlsHint_.setCharacterSize(22);
+    controlsHint_.setFillColor(sf::Color(200, 200, 200));
+
 	volumeHint_.setString("Press [+] or [-] to change volume");
 	volumeHint_.setCharacterSize(20);
 	volumeHint_.setFillColor(sf::Color(150, 150, 150));
@@ -47,6 +54,8 @@ void SkinsMenu::updateLayout(sf::Vector2u windowSize, float scale) {
 	title_.setCharacterSize(static_cast<unsigned int>(skinsMenuTitleFontSize * scale));
 	centerOrigin(title_);
 	title_.setPosition({ centerX, titleY });
+	controlsHint_.setCharacterSize(static_cast<unsigned int>(20 * scale));
+	volumeHint_.setCharacterSize(static_cast<unsigned int>(18 * scale));
 	const float startY = windowSize.y * itemsStartYPercent;
 	for (size_t i = 0; i < items_.size(); i++) {
 		items_[i].text.setCharacterSize(static_cast<unsigned int>(skinsMenuItemFontSize * scale));
@@ -58,8 +67,9 @@ void SkinsMenu::updateLayout(sf::Vector2u windowSize, float scale) {
 
 int SkinsMenu::handleMouse(sf::Vector2i mousePos, bool isClicked) {
 	sf::Vector2f mouseCoords = static_cast<sf::Vector2f>(mousePos);
+	int lastHover = hoveredIndex_;
 	hoveredIndex_ = -1;
-	for (int i = 0; i < items_.size(); i++) {
+	for (int i = 0; i < (int)items_.size(); i++) {
 		if (items_[i].text.getGlobalBounds().contains(mouseCoords)) {
 			hoveredIndex_ = i;
 			if (isClicked) {
@@ -80,9 +90,15 @@ void SkinsMenu::draw(sf::RenderWindow& window) {
 		}
 		window.draw(items_[i].text);
 	}
-
-	sf::FloatRect hintBounds = volumeHint_.getGlobalBounds();
-	volumeHint_.setPosition({ (float)window.getSize().x*hintPercent- hintBounds.size.x, (float)window.getSize().y * hintPercent });
+    float windowX = static_cast<float>(window.getSize().x);
+    float windowY = static_cast<float>(window.getSize().y);
+    sf::FloatRect volBounds = volumeHint_.getGlobalBounds();
+    float rightEdge = windowX * hintPercent;
+    float bottomY = windowY * hintPercent;
+    volumeHint_.setPosition({rightEdge - volBounds.size.x, bottomY});
+    window.draw(volumeHint_);
+    sf::FloatRect ctrlBounds = controlsHint_.getGlobalBounds();
+    controlsHint_.setPosition({rightEdge - ctrlBounds.size.x, bottomY - spacing});
 	window.draw(volumeHint_);
 
 }

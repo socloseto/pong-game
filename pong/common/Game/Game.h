@@ -8,12 +8,17 @@
 #include <iostream>
 #include <stdexcept>
 
+
 class Game {
 public:
 	Game();
 	~Game();
 	void run();
 private:
+	void initUI();
+	void initEntities();
+	void initAudio();
+	void togglePause();
 	void processInput();
 	void update(float deltaTime);
 	void render();
@@ -23,8 +28,8 @@ private:
 	float gameOverTimer_ = 0.f;
 	const unsigned short framerateLimit=60;
 	unsigned short fontSize = 40;
-	const unsigned short minWindowWidth=800;
-	const unsigned short minWindowHeight=600;
+	const unsigned int minWindowWidth=800;
+	const unsigned int minWindowHeight=600;
 	const float paddleOffsetFromSide = 40.f;
 	const unsigned short winConditionState = 11;
 	float basePaddleSpeed = 450.f;
@@ -36,7 +41,11 @@ private:
 	Paddle cpu_;
 	ScorePanel score_;
 	SkinsMenu skinsMenu_;
-
-	enum class GameState { Menu, Playing, GameOver };
+	sf::Font font_;
+	sf::Text pauseText_;
+	sf::Text pauseHintText_;
+	sf::RectangleShape pauseOverlay_;
+	enum class GameState { Menu, Playing, GameOver, Paused };
 	GameState state_ = GameState::Menu;
+	GameState prevState_ = GameState::Playing;
 };
