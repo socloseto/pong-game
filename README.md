@@ -1,5 +1,5 @@
 # Pong Game — C++ & SFML Implementation
-##керування<br>
+## Керування<br>
 **W** - ракетка вверх<br>
 **S** - ракетка вниз<br>
 **Space**/ **P** - пауза<br>
