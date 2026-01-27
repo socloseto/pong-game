@@ -1,11 +1,9 @@
 #pragma once
 
-
 class GoalObserver {
+ public:
+  virtual ~GoalObserver() = default;
 
-public:
-	virtual ~GoalObserver() = default;
-
-	enum class Side { Left, Right };
-	virtual void onGoal(Side side) = 0;
+  enum class Side { Left, Right };
+  virtual void onGoal(Side side) = 0;
 };
