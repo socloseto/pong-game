@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# === vcpkg & CMake specific ===
+vcpkg_installed/
+vcpkg-configuration.json
+out/
+build/
+CMakeFiles/
+CMakeCache.txt
