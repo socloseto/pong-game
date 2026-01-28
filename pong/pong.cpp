@@ -1,6 +1,6 @@
 #include <iostream>
 #include <stdexcept>
-
+#include <SFML/Main.hpp>
 #include "common/Game/Game.h"
 
 int main() {

@@ -1,23 +1,36 @@
 cmake_minimum_required(VERSION 3.15)
-
-set(VCPKG_TARGET_TRIPLET "x64-windows-static" CACHE STRING "")
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 project(PongGame LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(SFML COMPONENTS Network Graphics Window Audio System Main CONFIG REQUIRED)
-file(GLOB_RECURSE SOURCES 
-    "*.cpp" 
-    "*.h" 
-    "*.hpp"
-    "*.rc"
+include(FetchContent)
+
+FetchContent_Declare(
+    sfml
+    GIT_REPOSITORY https://github.com/SFML/SFML.git
+    GIT_TAG 3.0.2
 )
-list(FILTER SOURCES EXCLUDE REGEX ".*/out/.*")
-list(FILTER SOURCES EXCLUDE REGEX ".*/build/.*")
+
+
+
+set(SFML_STATIC_LIBRARIES ON CACHE BOOL "" FORCE)
+set(SFML_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(sfml)
+
+
+
+file(GLOB_RECURSE SOURCES "*.cpp" "*.h" "*.hpp" "*.rc")
+list(FILTER SOURCES EXCLUDE REGEX "out/.*|build/.*|.vs/.*|_deps/.*")
+
 
 add_executable(PongGame WIN32 ${SOURCES})
+
+
+target_compile_definitions(PongGame PRIVATE SFML_STATIC)
+
 
 target_link_libraries(PongGame PRIVATE 
     SFML::Graphics 
@@ -25,13 +38,19 @@ target_link_libraries(PongGame PRIVATE
     SFML::Audio 
     SFML::System
     SFML::Main
+    opengl32
+    winmm
+    gdi32
 )
 
-target_compile_definitions(PongGame PRIVATE SFML_STATIC)
-add_custom_command(TARGET PongGame POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pong/audio" "$<TARGET_FILE_DIR:PongGame>/audio"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pong/common" "$<TARGET_FILE_DIR:PongGame>/common"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pong/texturing" "$<TARGET_FILE_DIR:PongGame>/texturing"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pong/ui" "$<TARGET_FILE_DIR:PongGame>/ui"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/pong/Objects" "$<TARGET_FILE_DIR:PongGame>/Objects"
-)
+
+set(RES_DIRS audio common texturing ui Objects)
+foreach(DIR ${RES_DIRS})
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/pong/${DIR}")
+        add_custom_command(TARGET PongGame POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory 
+            "${CMAKE_CURRENT_SOURCE_DIR}/pong/${DIR}" 
+            "$<TARGET_FILE_DIR:PongGame>/${DIR}"
+        )
+    endif()
+endforeach()
