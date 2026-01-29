@@ -22,8 +22,11 @@ FetchContent_MakeAvailable(sfml)
 
 
 
-file(GLOB_RECURSE SOURCES "*.cpp" "*.h" "*.hpp" "*.rc")
-list(FILTER SOURCES EXCLUDE REGEX "out/.*|build/.*|.vs/.*|_deps/.*")
+file(GLOB_RECURSE SOURCES 
+    "pong/*.cpp" 
+    "pong/*.h" 
+    "pong/*.hpp"
+)
 
 
 add_executable(PongGame WIN32 ${SOURCES})

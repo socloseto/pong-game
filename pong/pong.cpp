@@ -1,7 +1,8 @@
 #include <iostream>
-#include <stdexcept>
-#include <SFML/Main.hpp>
 #include "common/Game/Game.h"
+#ifdef _MSC_VER
+#include <SFML/Main.hpp>
+#endif
 
 int main() {
   try {
