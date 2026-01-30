@@ -31,6 +31,9 @@ file(GLOB_RECURSE SOURCES
 
 add_executable(PongGame WIN32 ${SOURCES})
 
+if(WIN32 AND MINGW)
+    target_link_options(PongGame PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
 
 target_compile_definitions(PongGame PRIVATE SFML_STATIC)
 
